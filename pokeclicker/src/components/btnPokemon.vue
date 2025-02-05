@@ -1,7 +1,7 @@
 <template>
   <div class="pokemon-container">
     <v-btn @click="changePokemon" class="bg-white pokemon-btn">
-      <img :src="randomPokemon?.image" :alt="randomPokemon?.name" />
+        <img :src="randomPokemon?.image" :alt="randomPokemon?.name" />
       <p>{{ randomPokemon?.name }}</p>
     </v-btn>
     <v-progress-linear
@@ -43,30 +43,21 @@ onMounted(async () => {
 
 <style scoped lang="sass">
 .pokemon-container
-  display: flex
-  flex-direction: column
-  align-items: center
-  width: 260px  // Plus large
-  text-align: center
+  width: 320px
 
-.pokemon-btn
-  width: 100%
-  height: 120px  // Plus haut
-  display: flex
-  flex-direction: column
-  align-items: center
-  justify-content: center
-  text-transform: none
-  font-size: 1.8rem  // Agrandir le texte si besoin
 
-  img
+  .pokemon-btn
+    width: 320px
+    height: 200px
+    display: block
 
-    width: 70px  // Agrandir l’image aussi
-    height: 70px
-    object-fit: contain
 
-.pokemon-progress
-  width: 100%
+img
+  display: block
+  margin: 0 auto
+p
+  display: block
+  margin-top: 5px
 </style>
 
 
