@@ -1,8 +1,14 @@
 <template>
   <div class="pokemon-container">
     <v-btn @click="changePokemon" class="bg-white pokemon-btn">
-        <img :src="randomPokemon?.image" :alt="randomPokemon?.name" />
-      <p>{{ randomPokemon?.name }}</p>
+      <ul>
+        <li>
+          <img :src="randomPokemon?.image" :alt="randomPokemon?.name" />
+        </li>
+        <li>
+          <p>{{ randomPokemon?.name }}</p>
+        </li>
+      </ul>
     </v-btn>
     <v-progress-linear
       color="success"
@@ -54,10 +60,13 @@ onMounted(async () => {
 
 img
   display: block
+  width: 160px
+  height: 160px
   margin: 0 auto
-p
-  display: block
-  margin-top: 5px
+
+ul
+  text-decoration: none
+  list-style-type: none
 </style>
 
 
