@@ -8,3 +8,14 @@
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );
+
+@font-face {
+  font-family: 'PokemonFont';
+  src: url('@/assets/font/PressStart2P-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'PokemonFont', sans-serif;
+}

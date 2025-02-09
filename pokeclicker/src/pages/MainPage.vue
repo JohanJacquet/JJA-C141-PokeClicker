@@ -32,11 +32,7 @@ const statistique = ref([
   justify-content: center
   align-items: center
   margin: auto
-  height: 20vh // 100 = au centre, et si je met moi, ça va plus haut
-  background-color: red
-  .btn
-    background-color: blue
-  .stat
-    background-color: blue
+  height: 100vh // 100 = au centre, et si je met moi, ça va plus haut
+
 </style>
 

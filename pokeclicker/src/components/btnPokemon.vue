@@ -56,6 +56,7 @@ onMounted(async () => {
     width: 320px
     height: 200px
     display: block
+    font-size: 18px
 
 
 img
