@@ -1,6 +1,13 @@
 <template>
   <div class="statistique">
     <v-table class="custom-table">
+      <thead>
+        <tr>
+          <td colspan="2">
+            Vos Statistiques
+          </td>
+        </tr>
+      </thead>
       <tbody>
       <tr>
         <td>
@@ -46,6 +53,14 @@
   padding: 15px
   text-align: center
   background-color: #f8f9fa
+
+thead
+  color: black
+  text-align: center
+  font-size: 18px
+  font-weight: bold
+  margin: 10px
+  text-decoration: underline 2px
 
 tbody
   background-color: white
