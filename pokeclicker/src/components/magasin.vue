@@ -1,6 +1,6 @@
 <template>
   <div class="statistique">
-    <v-table class="custom-table" height="50%">
+    <v-table class="custom-table" height="500px">
       <thead class="magasin-head">
       <tr>
         <td colspan="3">
