@@ -1,7 +1,7 @@
 <template>
   <div class="statistique">
-    <v-table class="custom-table" height="500px">
-      <thead>
+    <v-table class="custom-table" height="100%">
+      <thead class="magasin-head">
       <tr>
         <td colspan="3">
           PokeStore
@@ -42,6 +42,11 @@
 </script>
 
 <style scoped lang="sass">
+.magasin-head
+  position: sticky
+  top: 0
+  z-index: 1
+
 .upgrade-prix
   margin-top: 20px
 
@@ -64,13 +69,14 @@
 .custom-table
   border-collapse: separate !important
   border-spacing: 0 8px
-  min-width: 1000px
+  width: 100%
 
 .custom-table td
   border: 6px double black
   padding: 15px
   text-align: center
   background-color: #f8f9fa
+
 
 thead
   color: black
