@@ -66,6 +66,7 @@ const statistique = ref([
   margin: auto
   height: 100vh // 100 = au centre,cd poke et si je met moi, ça va plus haut
 
-
+.onglet
+  background-color: rgba(255,255,255,0.4)
 </style>
 

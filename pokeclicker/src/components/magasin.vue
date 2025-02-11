@@ -1,6 +1,6 @@
 <template>
   <div class="statistique">
-    <v-table class="custom-table" height="100%">
+    <v-table class="custom-table" height="50%">
       <thead class="magasin-head">
       <tr>
         <td colspan="3">
@@ -69,7 +69,6 @@
 .custom-table
   border-collapse: separate !important
   border-spacing: 0 8px
-  width: 100%
 
 .custom-table td
   border: 6px double black
