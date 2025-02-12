@@ -1,6 +1,7 @@
 <template>
-  <div class="statistique">
-    <v-table class="custom-table" height="100%">
+  <div class="magasin-container">
+    <p>PokeDollar : 99999</p>
+    <v-table class="custom-table">
       <thead class="magasin-head">
       <tr>
         <td colspan="3">
@@ -8,15 +9,15 @@
         </td>
       </tr>
       </thead>
-      <tbody>
-      <tr v-for="index in 100" >
+      <tbody class="magasin-body">
+      <tr v-for="index in 100" :key="index">
         <td>
           <img src="../assets/shopIcon/proteine.png" alt="image de l'objet protéine, correspondant à l'amélioration N°1"/>
           <p>0</p>
           <p>DPC : 999</p>
         </td>
         <td>
-          <div v-for="index in 10" class="upgrade-container">
+          <div v-for="index in 10" :key="index" class="upgrade-container">
             <img src="../assets/shopIcon/proteine-upgrade.png" alt="image de l'objet l'amélioration de protéine, correspondant à l'amélioration N°1" class="upgrade-img"/>
           </div>
         </td>
@@ -38,15 +39,37 @@
   </div>
 </template>
 
-<script setup>
-
-</script>
-
 <style scoped lang="sass">
+.magasin-container
+  display: flex
+  flex-direction: column
+  height: 100vh // Utilisez 100vh pour prendre toute la hauteur de la vue
+  overflow: hidden
+  color: black
+
+.custom-table
+  border-collapse: separate !important
+  border-spacing: 0 8px
+  width: 100%
+  display: flex
+  flex-direction: column
+  height: 100%
+
 .magasin-head
   position: sticky
   top: 0
-  z-index: 1
+  z-index: 2
+  background-color: white
+
+.magasin-body
+  flex-grow: 1
+  overflow-y: auto
+  height: 100%
+
+tbody
+  display: block
+  overflow: auto
+  width: 100%
 
 .upgrade-prix
   margin-top: 20px
@@ -64,26 +87,17 @@
 .upgrade-img
   width: 35px
 
-.statistique
-  margin: 20px
-
-.custom-table
-  border-collapse: separate !important
-  border-spacing: 0 8px
-
 .custom-table td
   border: 6px double black
   padding: 15px
   text-align: center
   background-color: #f8f9fa
 
-
 thead
   color: black
   text-align: center
   font-size: 18px
   font-weight: bold
-  margin: 10px
   text-decoration: underline 2px
 
 tbody
