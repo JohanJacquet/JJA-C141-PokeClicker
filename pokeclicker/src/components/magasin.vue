@@ -1,6 +1,6 @@
 <template>
   <div class="magasin-container">
-    <p>PokeDollar : 99999</p>
+    <p>PokeDollar : {{ monArgent }}</p>
     <v-table class="custom-table">
       <thead class="magasin-head">
       <tr>
@@ -38,6 +38,18 @@
     </v-table>
   </div>
 </template>
+
+<script setup>
+const props = defineProps({
+  infoJoueur: Array,
+})
+
+
+
+const monArgent = computed(() => {
+  return props.infoJoueur[0].argent
+})
+</script>
 
 <style scoped lang="sass">
 .magasin-container

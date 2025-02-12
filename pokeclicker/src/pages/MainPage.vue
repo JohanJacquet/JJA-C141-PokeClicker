@@ -11,11 +11,11 @@
       <v-card-text class="pa-0">
         <v-tabs-window v-model="tab">
           <v-tabs-window-item value="one" class="magasin">
-            <magasin></magasin>
+            <magasin :infoJoueur="joueur"></magasin>
           </v-tabs-window-item>
           <v-tabs-window-item value="two">
             <div class="stat">
-              <statistique :joueur="joueur"></statistique>
+              <statistique :infoJoueur="joueur"></statistique>
             </div>
           </v-tabs-window-item>
           <v-tabs-window-item value="three">

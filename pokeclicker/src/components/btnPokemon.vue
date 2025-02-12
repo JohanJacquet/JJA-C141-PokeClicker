@@ -27,10 +27,12 @@
 import { onMounted } from "vue";
 import { usePokemonStore } from "@/stores/pokemonStore";
 
+const ARGENT_MIN = 2
+const ARGENT_MAX = 5
 
-const couleurBien = 'success'
-const couleurMoyen = 'yellow'
-const couleurMal = 'red'
+const COULEUR_HAUT_HP = 'success'
+const COULEUR_MOYEN_HP = 'yellow'
+const COULEUR_BAS_HP = 'red'
 
 const props = defineProps({
   pokemonStore: Array,
@@ -38,18 +40,27 @@ const props = defineProps({
 })
 
 const viePokemonAff = ref(100)
-const couleurPokemon = ref(couleurBien)
+const couleurPokemon = ref(COULEUR_HAUT_HP)
 
 // Utilisation du getter pour obtenir un Pokémon aléatoire
 const randomPokemon = ref(null);
 
 function attaquePokemon() {
   randomPokemon.value.hp -= props.infoJoueur[0].attaque
-  let pourcentagePv = randomPokemon.value.hp / randomPokemon.value.stats[0].base_stat * 100
+  let pourcentagePv = Math.ceil(randomPokemon.value.hp / randomPokemon.value.stats[0].base_stat * 100)
 
-  viePokemonAff.value = randomPokemon.value.hp / randomPokemon.value.stats[0].base_stat * 100
+  viePokemonAff.value = pourcentagePv
 
-  console.log(pourcentagePv)
+  // Modifie la couleur de la bar de vie selon les PV manquant du pokemon
+  if (pourcentagePv <= 0) {
+    gagnerArgent()
+    changePokemon()
+  } else if (pourcentagePv <= 30) {
+    couleurPokemon.value = COULEUR_BAS_HP
+  } else if (pourcentagePv <= 50) {
+    couleurPokemon.value = COULEUR_MOYEN_HP
+  }
+
 }
 
 function changePokemon() {
@@ -61,10 +72,19 @@ function changePokemon() {
     randomPoke.hp = randomPoke.stats[0].base_stat * props.infoJoueur[0].zoneEnCours
     randomPoke.stats[0].base_stat = randomPoke.stats[0].base_stat * props.infoJoueur[0].zoneEnCours
 
+
     // Affecte le nouveau pokemon au pokemon actuelle
     randomPokemon.value = randomPoke;
-    //console.log(props.infoJoueur[0].attaque)
+
+
+    // Remet l'affichage des PV par défaut
+    viePokemonAff.value = 100
+    couleurPokemon.value = COULEUR_HAUT_HP
   }
+}
+
+function gagnerArgent() {
+  props.infoJoueur[0].argent += Math.floor(Math.random() * (ARGENT_MAX - ARGENT_MIN) + 1)
 }
 
 
