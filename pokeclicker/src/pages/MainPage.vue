@@ -42,8 +42,8 @@ import Magasin from "@/components/magasin.vue";
 const tab = ref(null);
 
 const statistique = ref([
-  {type: "Argent", valeur: 3420},
-  {type: "Attaque", valeur: 120},
+  { type: "Argent", valeur: 3420 },
+  { type: "Attaque", valeur: 120 },
 ]);
 </script>
 
@@ -51,6 +51,8 @@ const statistique = ref([
 .container
   display: flex
   height: 100vh
+  width: 100vw // Prend toute la largeur de l'écran
+  align-items: stretch // Étire les enfants pour occuper toute la largeur
 
 .onglet
   background-color: rgba(255, 255, 255, 0.4)
@@ -62,16 +64,17 @@ const statistique = ref([
 .right-container
   display: flex
   flex-direction: column
-  flex-grow: 2
+  flex-grow: 1 // Prend tout l'espace restant
   padding: 16px
-  justify-content: space-between
-// Permet d'espacer le carousel et le bouton
+  align-items: center // Centre les enfants horizontalement
+  justify-content: space-between // Répartit les éléments équitablement
 
 .carousel
-  margin-bottom: auto
-// Reste collé en haut
+  align-self: center // Centre horizontalement
+  margin-top: 16px // Espace par rapport au haut
 
 .btn
-  align-self: center
-// Centre le bouton
+  align-self: center // Centre horizontalement
+  margin-top: auto // Centre verticalement avec l'espace dispo
+  margin-bottom: auto // Centre verticalement avec l'espace dispo
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="statistique">
-    <v-table class="custom-table" height="500px">
+    <v-table class="custom-table" height="100%">
       <thead class="magasin-head">
       <tr>
         <td colspan="3">
@@ -9,9 +9,10 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="index in 10" >
+      <tr v-for="index in 100" >
         <td>
           <img src="../assets/shopIcon/proteine.png" alt="image de l'objet protéine, correspondant à l'amélioration N°1"/>
+          <p>0</p>
           <p>DPC : 999</p>
         </td>
         <td>
