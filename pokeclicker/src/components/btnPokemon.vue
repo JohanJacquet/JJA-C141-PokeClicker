@@ -1,6 +1,6 @@
 <template>
   <div class="pokemon-container">
-    <v-btn @click="changePokemon" class="bg-white pokemon-btn">
+    <v-btn @click="attaquePokemon" class="bg-white pokemon-btn">
       <ul>
         <li>
           <img :src="randomPokemon?.image" :alt="randomPokemon?.name" />
@@ -11,10 +11,11 @@
       </ul>
     </v-btn>
     <v-progress-linear
-      color="success"
-      model-value="100"
+      @click="changePokemon"
+      :color="couleurPokemon"
+      :model-value="viePokemonAff"
       class="pokemon-progress"
-      height="15"
+      height="20"
       striped
     />
   </div>
@@ -26,23 +27,46 @@
 import { onMounted } from "vue";
 import { usePokemonStore } from "@/stores/pokemonStore";
 
-const pokemonStore = usePokemonStore();
+
+const couleurBien = 'success'
+const couleurMoyen = 'yellow'
+const couleurMal = 'red'
+
+const props = defineProps({
+  pokemonStore: Array,
+  infoJoueur: Array
+})
+
+const viePokemonAff = ref(100)
+const couleurPokemon = ref(couleurBien)
 
 // Utilisation du getter pour obtenir un Pokémon aléatoire
 const randomPokemon = ref(null);
 
+function attaquePokemon() {
+  randomPokemon.value.hp -= props.infoJoueur[0].attaque
+  let pourcentagePv = randomPokemon.value.hp / randomPokemon.value.stats[0].base_stat * 100
+
+  viePokemonAff.value = randomPokemon.value.hp / randomPokemon.value.stats[0].base_stat * 100
+
+  console.log(pourcentagePv)
+}
 
 function changePokemon() {
-  if (pokemonStore.pokemons.length > 0) {
-    const random = pokemonStore.pokemons[Math.floor(Math.random() * pokemonStore.pokemons.length)];
-    randomPokemon.value = random;
+  if (props.pokemonStore.pokemons.length > 0) {
+    // Récupère un pokemon aléatoire du tableau de pokemon
+    const randomPoke = props.pokemonStore.pokemons[Math.floor(Math.random() * props.pokemonStore.pokemons.length)];
+
+    // Recalcule les hp du pokemon en tenant compte de la zone
+    randomPoke.hp = randomPoke.stats[0].base_stat * props.infoJoueur[0].zoneEnCours
+    randomPoke.stats[0].base_stat = randomPoke.stats[0].base_stat * props.infoJoueur[0].zoneEnCours
+
+    // Affecte le nouveau pokemon au pokemon actuelle
+    randomPokemon.value = randomPoke;
+    //console.log(props.infoJoueur[0].attaque)
   }
 }
 
-onMounted(async () => {
-  await pokemonStore.fetchPokemon()
-  changePokemon()
-});
 
 </script>
 
@@ -68,6 +92,10 @@ img
 ul
   text-decoration: none
   list-style-type: none
+
+.pokemon-progress
+  background-color: rgba(0,0,0,0.7)
+
 </style>
 
 

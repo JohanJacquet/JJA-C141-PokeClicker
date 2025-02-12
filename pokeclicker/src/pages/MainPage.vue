@@ -28,7 +28,7 @@
     <!-- Partie droite -->
     <div class="right-container">
       <carousel-zone class="carousel"></carousel-zone>
-      <btn-pokemon class="btn" :joueur="joueur"></btn-pokemon>
+      <btn-pokemon class="btn" :infoJoueur="joueur" :pokemonStore="pokemonStore"></btn-pokemon>
     </div>
   </div>
 </template>
@@ -38,15 +38,28 @@ import BtnPokemon from "@/components/btnPokemon.vue";
 import Statistique from "@/components/statistique.vue";
 import CarouselZone from "@/components/carouselZone.vue";
 import Magasin from "@/components/magasin.vue";
+import {usePokemonStore} from "@/stores/pokemonStore.js";
+import {onMounted} from "vue";
 
 
-const joueur = reactive([
+const joueur = reactive([{
+  argent: 0,
+  attaque: 10,
+  critChance: 1,
+  critMult: 2,
+  zoneEnCours: 1,
+  zoneMax: 1
+}])
 
-  { type: "Argent", valeur: 0 },
-  { type: "Attaque", valeur: 10 },
-])
+const pokemonStore = usePokemonStore();
+
 
 const tab = ref(null);
+
+onMounted(async () => {
+  await pokemonStore.fetchPokemon()
+});
+
 
 </script>
 
