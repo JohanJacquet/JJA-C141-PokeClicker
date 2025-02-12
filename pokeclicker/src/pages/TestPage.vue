@@ -1,8 +1,16 @@
 <template>
   <div class="container">
-    <!-- Onglet Tabs à gauche -->
+    <div>
+      <carousel-zone></carousel-zone>
+    </div>
+    <div class="btn">
+      <btn-pokemon></btn-pokemon>
+    </div>
     <v-card class="onglet">
-      <v-tabs v-model="tab" bg-color="primary">
+      <v-tabs
+        v-model="tab"
+        bg-color="primary"
+      >
         <v-tab value="one">PokeShop</v-tab>
         <v-tab value="two">Statistique</v-tab>
         <v-tab value="three">Rebirth ?</v-tab>
@@ -18,20 +26,17 @@
               <statistique :stats="statistique"></statistique>
             </div>
           </v-tabs-window-item>
+
           <v-tabs-window-item value="three">
             A venir... !!!!
           </v-tabs-window-item>
         </v-tabs-window>
       </v-card-text>
     </v-card>
-
-    <!-- Partie droite -->
-    <div class="right-container">
-      <carousel-zone class="carousel"></carousel-zone>
-      <btn-pokemon class="btn"></btn-pokemon>
-    </div>
   </div>
+
 </template>
+
 
 <script setup>
 import BtnPokemon from "@/components/btnPokemon.vue";
@@ -39,39 +44,29 @@ import Statistique from "@/components/statistique.vue";
 import CarouselZone from "@/components/carouselZone.vue";
 import Magasin from "@/components/magasin.vue";
 
-const tab = ref(null);
+const tab = ref(null)
 
 const statistique = ref([
-  {type: "Argent", valeur: 3420},
-  {type: "Attaque", valeur: 120},
-]);
+  { type: "Argent", valeur: 3420},
+  { type: "Attaque", valeur: 120}
+])
+
+
 </script>
 
+
+
 <style scoped lang="sass">
+
 .container
   display: flex
-  height: 100vh
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  margin: auto
+  height: 100vh // 100 = au centre,cd poke et si je met moi, ça va plus haut
 
 .onglet
-  background-color: rgba(255, 255, 255, 0.4)
-  flex-grow: 1
-  max-width: 1000px
-  min-width: 1000px
-  height: 100vh
-
-.right-container
-  display: flex
-  flex-direction: column
-  flex-grow: 2
-  padding: 16px
-  justify-content: space-between
-// Permet d'espacer le carousel et le bouton
-
-.carousel
-  margin-bottom: auto
-// Reste collé en haut
-
-.btn
-  align-self: center
-// Centre le bouton
+  background-color: rgba(255,255,255,0.4)
 </style>
+
