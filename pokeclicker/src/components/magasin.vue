@@ -1,6 +1,6 @@
 <template>
   <div class="magasin-container">
-    <p>PokeDollar : {{ monArgent }}</p>
+    <p class="ma-2">PokeDollar : {{ monArgent }}</p>
     <v-table class="custom-table">
       <thead class="magasin-head">
       <tr>

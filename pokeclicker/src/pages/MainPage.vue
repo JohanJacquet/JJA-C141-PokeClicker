@@ -44,7 +44,7 @@ import {onMounted} from "vue";
 
 const joueur = reactive([{
   argent: 0,
-  attaque: 10,
+  attaque: 20,
   critChance: 1,
   critMult: 2,
   zoneEnCours: 1,
@@ -75,7 +75,8 @@ onMounted(async () => {
   flex-grow: 1
   max-width: 1000px
   min-width: 1000px
-  height: 100vh
+  margin: 10px
+  height: 98vh
 
 .right-container
   display: flex

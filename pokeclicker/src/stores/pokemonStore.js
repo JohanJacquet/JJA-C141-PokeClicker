@@ -8,7 +8,7 @@ export const usePokemonStore = defineStore('pokemon', {
   }),
   actions: {
     async fetchPokemon() {
-      const ids = Array.from({length: 3}, (_, i) => i + 1); // Exemple : Bulbizarre, Salamèche, Carapuce
+      const ids = Array.from({length: 1}, (_, i) => i + 1); // Exemple : Bulbizarre, Salamèche, Carapuce
       const promises = ids.map(id =>
         axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
       );

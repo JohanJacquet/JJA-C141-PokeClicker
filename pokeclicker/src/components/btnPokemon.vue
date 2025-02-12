@@ -46,6 +46,7 @@ const couleurPokemon = ref(COULEUR_HAUT_HP)
 const randomPokemon = ref(null);
 
 function attaquePokemon() {
+
   randomPokemon.value.hp -= props.infoJoueur[0].attaque
   let pourcentagePv = Math.ceil(randomPokemon.value.hp / randomPokemon.value.stats[0].base_stat * 100)
 
@@ -66,7 +67,7 @@ function attaquePokemon() {
 function changePokemon() {
   if (props.pokemonStore.pokemons.length > 0) {
     // Récupère un pokemon aléatoire du tableau de pokemon
-    const randomPoke = props.pokemonStore.pokemons[Math.floor(Math.random() * props.pokemonStore.pokemons.length)];
+    const randomPoke = JSON.parse(JSON.stringify(props.pokemonStore.pokemons[Math.floor(Math.random() * props.pokemonStore.pokemons.length)]));
 
     // Recalcule les hp du pokemon en tenant compte de la zone
     randomPoke.hp = randomPoke.stats[0].base_stat * props.infoJoueur[0].zoneEnCours
@@ -84,9 +85,19 @@ function changePokemon() {
 }
 
 function gagnerArgent() {
-  props.infoJoueur[0].argent += Math.floor(Math.random() * (ARGENT_MAX - ARGENT_MIN) + 1)
-}
+  let argentParDefaut = (Math.floor(Math.random() * (ARGENT_MAX - ARGENT_MIN)) + 1)
+  let argentParDefautAvecZone = (Math.floor(Math.random() * (ARGENT_MAX - ARGENT_MIN)) + 1) * props.infoJoueur[0].zoneEnCours
+  let argentSelonPV = Math.ceil((randomPokemon.value.stats[0].base_stat * props.infoJoueur[0].zoneEnCours * 0.005))
+  console.log('argentParDefaut : ' + argentParDefaut)
+  console.log('argentParDefaut +zone : ' + argentParDefautAvecZone)
+  console.log('argentselonPv : ' + argentSelonPV)
 
+  props.infoJoueur[0].argent += argentParDefautAvecZone + argentSelonPV
+  //props.infoJoueur[0].argent += (Math.floor(Math.random() * (ARGENT_MAX - ARGENT_MIN)) + 1) * props.infoJoueur[0].zoneEnCours + randomPokemon.value.hp * 0.05
+}
+onMounted(async () => {
+  await pokemonStore.fetchPokemon()
+});
 
 </script>
 
