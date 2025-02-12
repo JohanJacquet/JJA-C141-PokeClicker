@@ -15,7 +15,7 @@
           </v-tabs-window-item>
           <v-tabs-window-item value="two">
             <div class="stat">
-              <statistique :stats="statistique"></statistique>
+              <statistique :joueur="joueur"></statistique>
             </div>
           </v-tabs-window-item>
           <v-tabs-window-item value="three">
@@ -28,7 +28,7 @@
     <!-- Partie droite -->
     <div class="right-container">
       <carousel-zone class="carousel"></carousel-zone>
-      <btn-pokemon class="btn"></btn-pokemon>
+      <btn-pokemon class="btn" :joueur="joueur"></btn-pokemon>
     </div>
   </div>
 </template>
@@ -39,12 +39,15 @@ import Statistique from "@/components/statistique.vue";
 import CarouselZone from "@/components/carouselZone.vue";
 import Magasin from "@/components/magasin.vue";
 
+
+const joueur = reactive([
+
+  { type: "Argent", valeur: 0 },
+  { type: "Attaque", valeur: 10 },
+])
+
 const tab = ref(null);
 
-const statistique = ref([
-  { type: "Argent", valeur: 3420 },
-  { type: "Attaque", valeur: 120 },
-]);
 </script>
 
 <style scoped lang="sass">
