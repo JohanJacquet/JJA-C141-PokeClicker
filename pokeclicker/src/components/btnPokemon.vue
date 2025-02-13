@@ -19,6 +19,17 @@
       height="20"
       striped
     />
+    <div class="money-bags-container">
+      <img
+        v-for="(bag, index) in moneyBags"
+        :key="index"
+        src="../assets/lootIcon/moneyBag.png"
+        class="money-bag"
+        :style="{ left: bag.x + 'px', top: bag.y + 'px' }"
+        @mouseenter="collectMoney(index, bag.amount)"
+      />
+    </div>
+
   </div>
 </template>
 
@@ -45,11 +56,33 @@ const emit = defineEmits(["changerPokemon"])
 const viePokemonAff = ref(100)
 const couleurPokemon = ref(COULEUR_HAUT_HP)
 const isDying = ref(false);
+const moneyBags = ref([]); // Stocke les sacs d'argent
 
 // Utilisation du getter pour obtenir un Pokémon aléatoire
 const randomPokemon = computed(() => {
   return props.infoJoueur[0].pokemonEnCours
 });
+
+
+function gagnerArgent() {
+  let argentTotal = (Math.floor(Math.random() * (ARGENT_MAX - ARGENT_MIN)) + 1) * props.infoJoueur[0].zoneEnCours
+    + Math.ceil((randomPokemon.value.stats[0].base_stat * props.infoJoueur[0].zoneEnCours * 0.005));
+
+  // Ajoute plusieurs sacs d'argent avec des positions aléatoires
+  for (let i = 0; i < 3; i++) { // 3 sacs par Pokémon tué
+    moneyBags.value.push({
+      x: Math.random() * 200, // Position X aléatoire
+      y: Math.random() * 100 + 100, // Position Y aléatoire
+      amount: Math.ceil(argentTotal / 3) // Argent réparti sur 3 sacs
+    });
+  }
+}
+
+function collectMoney(index, amount) {
+  props.infoJoueur[0].argent += amount; // Ajoute l'argent en touchant un sac
+  moneyBags.value.splice(index, 1); // Supprime le sac
+}
+
 
 function attaquePokemon() {
 
@@ -102,17 +135,6 @@ function changePokemon() {
   }
 }
 
-function gagnerArgent() {
-  let argentParDefaut = (Math.floor(Math.random() * (ARGENT_MAX - ARGENT_MIN)) + 1)
-  let argentParDefautAvecZone = (Math.floor(Math.random() * (ARGENT_MAX - ARGENT_MIN)) + 1) * props.infoJoueur[0].zoneEnCours
-  let argentSelonPV = Math.ceil((randomPokemon.value.stats[0].base_stat * props.infoJoueur[0].zoneEnCours * 0.005))
-  console.log('argentParDefaut : ' + argentParDefaut)
-  console.log('argentParDefaut +zone : ' + argentParDefautAvecZone)
-  console.log('argentselonPv : ' + argentSelonPV)
-
-  props.infoJoueur[0].argent += argentParDefautAvecZone + argentSelonPV
-  //props.infoJoueur[0].argent += (Math.floor(Math.random() * (ARGENT_MAX - ARGENT_MIN)) + 1) * props.infoJoueur[0].zoneEnCours + randomPokemon.value.hp * 0.05
-}
 onMounted(async () => {
   await pokemonStore.fetchPokemon()
 });
@@ -121,11 +143,28 @@ onMounted(async () => {
 
 
 <style scoped lang="sass">
+.money-bags-container
+  position: relative
+  width: 320px
+  height: 300px
+  pointer-events: none // Empêche les sacs de bloquer les clics
+
+.money-bag
+  position: absolute
+  width: 40px
+  height: 40px
+  cursor: pointer
+  pointer-events: auto // Permet d'interagir avec les sacs
+  transition: transform 0.2s ease, opacity 0.2s ease
+  &:hover
+    transform: scale(1.2) rotate(-10deg)
+    opacity: 0.7
+
+
 .dying
   filter: brightness(0.3) sepia(1) hue-rotate(-50deg) saturate(10) !important
-  transform: rotate(-20deg) scale(1.1)
+  transform: rotate(90deg) scale(1.1)
   transition: all 0.3s ease
-
 
 
 .pokemon-container
