@@ -3,7 +3,8 @@
     <v-btn @click="attaquePokemon" class="bg-white pokemon-btn">
       <ul>
         <li>
-          <img :src="randomPokemon?.image" :alt="randomPokemon?.name" />
+          <img :src="randomPokemon?.image" :alt="randomPokemon?.name"
+               :class="{ 'dying': isDying }" />
         </li>
         <li>
           <p>{{ randomPokemon?.name }}</p>
@@ -43,6 +44,7 @@ const emit = defineEmits(["changerPokemon"])
 
 const viePokemonAff = ref(100)
 const couleurPokemon = ref(COULEUR_HAUT_HP)
+const isDying = ref(false);
 
 // Utilisation du getter pour obtenir un Pokémon aléatoire
 const randomPokemon = computed(() => {
@@ -59,7 +61,20 @@ function attaquePokemon() {
   // Modifie la couleur de la bar de vie selon les PV manquant du pokemon
   if (pourcentagePv <= 0) {
     gagnerArgent()
-    emit("changerPokemon")
+    if (pourcentagePv <= 0) {
+      isDying.value = true; // Active la classe rouge
+
+      setTimeout(() => {
+        isDying.value = false; // Désactive la classe après 300ms
+        gagnerArgent();
+        emit("changerPokemon");
+        viePokemonAff.value = 100;
+        couleurPokemon.value = COULEUR_HAUT_HP;
+      }, 300); // Durée de l'effet rouge (300ms)
+    }
+
+
+
     viePokemonAff.value = 100
     couleurPokemon.value = COULEUR_HAUT_HP
   } else if (pourcentagePv <= 30) {
@@ -106,6 +121,13 @@ onMounted(async () => {
 
 
 <style scoped lang="sass">
+.dying
+  filter: brightness(0.3) sepia(1) hue-rotate(-50deg) saturate(10) !important
+  transform: rotate(-20deg) scale(1.1)
+  transition: all 0.3s ease
+
+
+
 .pokemon-container
   width: 320px
 
