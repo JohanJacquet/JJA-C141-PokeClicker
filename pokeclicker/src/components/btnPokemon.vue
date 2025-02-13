@@ -39,11 +39,15 @@ const props = defineProps({
   infoJoueur: Array
 })
 
+const emit = defineEmits(["changerPokemon"])
+
 const viePokemonAff = ref(100)
 const couleurPokemon = ref(COULEUR_HAUT_HP)
 
 // Utilisation du getter pour obtenir un Pokémon aléatoire
-const randomPokemon = ref(null);
+const randomPokemon = computed(() => {
+  return props.infoJoueur[0].pokemonEnCours
+});
 
 function attaquePokemon() {
 
@@ -55,13 +59,14 @@ function attaquePokemon() {
   // Modifie la couleur de la bar de vie selon les PV manquant du pokemon
   if (pourcentagePv <= 0) {
     gagnerArgent()
-    changePokemon()
+    emit("changerPokemon")
+    viePokemonAff.value = 100
+    couleurPokemon.value = COULEUR_HAUT_HP
   } else if (pourcentagePv <= 30) {
     couleurPokemon.value = COULEUR_BAS_HP
   } else if (pourcentagePv <= 50) {
     couleurPokemon.value = COULEUR_MOYEN_HP
   }
-
 }
 
 function changePokemon() {
@@ -73,10 +78,8 @@ function changePokemon() {
     randomPoke.hp = randomPoke.stats[0].base_stat * props.infoJoueur[0].zoneEnCours
     randomPoke.stats[0].base_stat = randomPoke.stats[0].base_stat * props.infoJoueur[0].zoneEnCours
 
-
     // Affecte le nouveau pokemon au pokemon actuelle
     randomPokemon.value = randomPoke;
-
 
     // Remet l'affichage des PV par défaut
     viePokemonAff.value = 100

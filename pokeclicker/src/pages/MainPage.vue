@@ -28,7 +28,7 @@
     <!-- Partie droite -->
     <div class="right-container">
       <carousel-zone class="carousel"></carousel-zone>
-      <btn-pokemon class="btn" :infoJoueur="joueur" :pokemonStore="pokemonStore"></btn-pokemon>
+      <btn-pokemon class="btn" @changerPokemon="changePokemon" :infoJoueur="joueur" :pokemonStore="pokemonStore"></btn-pokemon>
     </div>
   </div>
 </template>
@@ -48,16 +48,34 @@ const joueur = reactive([{
   critChance: 1,
   critMult: 2,
   zoneEnCours: 1,
-  zoneMax: 1
+  zoneMax: 1,
+  pokemonEnCours: null
 }])
+
 
 const pokemonStore = usePokemonStore();
 
 
 const tab = ref(null);
 
+function changePokemon() {
+  if (pokemonStore.pokemons.length > 0) {
+    // Récupère un pokemon aléatoire du tableau de pokemon
+    const randomPoke = JSON.parse(JSON.stringify(pokemonStore.pokemons[Math.floor(Math.random() * pokemonStore.pokemons.length)]));
+
+    // Recalcule les hp du pokemon en tenant compte de la zone
+    randomPoke.hp = randomPoke.stats[0].base_stat * joueur[0].zoneEnCours
+    randomPoke.stats[0].base_stat = randomPoke.stats[0].base_stat * joueur[0].zoneEnCours
+
+    // Affecte le nouveau pokemon au pokemon actuelle
+    joueur[0].pokemonEnCours = randomPoke;
+  }
+}
+
+
 onMounted(async () => {
   await pokemonStore.fetchPokemon()
+  changePokemon()
 });
 
 
