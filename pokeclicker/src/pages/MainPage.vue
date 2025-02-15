@@ -3,10 +3,12 @@
     <!-- Onglet Tabs à gauche -->
     <v-card class="onglet">
       <v-tabs v-model="tab" bg-color="primary">
-        <v-tab value="one">PokeShop</v-tab>
+        <v-tab value="one" @click="incrementClickCount">PokeShop</v-tab>
         <v-tab value="two">Statistique</v-tab>
         <v-tab value="three">Rebirth ?</v-tab>
       </v-tabs>
+
+
 
       <v-card-text class="pa-0">
         <v-tabs-window v-model="tab">
@@ -41,6 +43,9 @@ import Magasin from "@/components/magasin.vue";
 import {usePokemonStore} from "@/stores/pokemonStore.js";
 import {onMounted} from "vue";
 
+const props = defineProps({
+  videoBg: Boolean,
+})
 
 const joueur = reactive([{
   argent: 0,
@@ -57,6 +62,22 @@ const pokemonStore = usePokemonStore();
 
 
 const tab = ref(null);
+
+const emit = defineEmits(["update:videoBg"]); // Permet de mettre à jour la prop dans App.vue
+const clickCount = ref(0);
+
+
+function incrementClickCount() {
+  clickCount.value++;
+
+  if (clickCount.value >= 10) {
+    emit("update:videoBg", true); // Envoie la mise à jour à App.vue
+    clickCount.value = 0; // Reset après activation
+  }
+}
+
+
+
 
 function changePokemon() {
   if (pokemonStore.pokemons.length > 0) {

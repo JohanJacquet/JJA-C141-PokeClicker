@@ -54,7 +54,7 @@
             <p>
               <div>
                 Achetez
-              </div>
+              </div>cd
               <div class="upgrade-prix">
                 999
               </div>
