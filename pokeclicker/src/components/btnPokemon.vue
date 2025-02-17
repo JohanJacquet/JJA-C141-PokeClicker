@@ -46,6 +46,10 @@ const COULEUR_HAUT_HP = 'success'
 const COULEUR_MOYEN_HP = 'yellow'
 const COULEUR_BAS_HP = 'red'
 
+let debugFuncGagnerArgent = 0
+let debugFuncAttaquer = 0
+let debugNbreSacArgentTotal = 0
+
 const props = defineProps({
   pokemonStore: Array,
   infoJoueur: Array
@@ -65,6 +69,8 @@ const randomPokemon = computed(() => {
 
 
 function gagnerArgent() {
+  console.log("Gagner argent a été appelé :" + ++debugFuncGagnerArgent)
+
   let argentTotal = (Math.floor(Math.random() * (ARGENT_MAX - ARGENT_MIN)) + 1) * props.infoJoueur[0].zoneEnCours
     + Math.ceil((randomPokemon.value.stats[0].base_stat * props.infoJoueur[0].zoneEnCours * 0.005));
 
@@ -75,7 +81,9 @@ function gagnerArgent() {
       y: Math.random() * -250, // Position Y aléatoire
       amount: Math.ceil(argentTotal / 3) // Argent réparti sur 3 sacs
     });
+    debugNbreSacArgentTotal++
   }
+  console.log("Sac d'argent créé au total :" + debugNbreSacArgentTotal)
 }
 
 function collectMoney(index, amount) {
@@ -85,34 +93,33 @@ function collectMoney(index, amount) {
 
 
 function attaquePokemon() {
+  if (!isDying.value) {
+    console.log("Attaquer a été appelé :" + ++debugFuncAttaquer)
+    randomPokemon.value.hp -= props.infoJoueur[0].attaque
+    let pourcentagePv = Math.ceil(randomPokemon.value.hp / randomPokemon.value.stats[0].base_stat * 100)
 
-  randomPokemon.value.hp -= props.infoJoueur[0].attaque
-  let pourcentagePv = Math.ceil(randomPokemon.value.hp / randomPokemon.value.stats[0].base_stat * 100)
+    viePokemonAff.value = pourcentagePv
 
-  viePokemonAff.value = pourcentagePv
-
-  // Modifie la couleur de la bar de vie selon les PV manquant du pokemon
-  if (pourcentagePv <= 0) {
-    gagnerArgent()
+    // Modifie la couleur de la bar de vie selon les PV manquant du pokemon
     if (pourcentagePv <= 0) {
+
       isDying.value = true; // Active la classe rouge
 
       setTimeout(() => {
-        isDying.value = false; // Désactive la classe après 300ms
         gagnerArgent();
         emit("changerPokemon");
         viePokemonAff.value = 100;
         couleurPokemon.value = COULEUR_HAUT_HP;
+        isDying.value = false; // Désactive la classe après 300ms
       }, 300); // Durée de l'effet rouge (300ms)
+
+      viePokemonAff.value = 100
+      couleurPokemon.value = COULEUR_HAUT_HP
+    } else if (pourcentagePv <= 30) {
+      couleurPokemon.value = COULEUR_BAS_HP
+    } else if (pourcentagePv <= 50) {
+      couleurPokemon.value = COULEUR_MOYEN_HP
     }
-
-
-    viePokemonAff.value = 100
-    couleurPokemon.value = COULEUR_HAUT_HP
-  } else if (pourcentagePv <= 30) {
-    couleurPokemon.value = COULEUR_BAS_HP
-  } else if (pourcentagePv <= 50) {
-    couleurPokemon.value = COULEUR_MOYEN_HP
   }
 }
 
