@@ -61,7 +61,6 @@ const magasin = reactive([
   {
     nom: "Protéine",
     img: "../assets/shopIcon/proteine.png",
-    imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
     alt: "image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°1",
     altUpgrade: "image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°1",
     nbreAchat: 0,
@@ -71,11 +70,19 @@ const magasin = reactive([
         Prix: 10,
         Mult: 2,
         Acheter: false,
+        imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
       },
       {
         Prix: 20,
         Mult: 3,
         Acheter: false,
+        imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
+      },
+      {
+        Prix: 20,
+        Mult: 3,
+        Acheter: false,
+        imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
       }
     ],
     dpc: 1,
@@ -96,11 +103,13 @@ const magasin = reactive([
         Prix: 10,
         Mult: 2,
         Acheter: false,
+        imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
       },
       {
         Prix: 20,
         Mult: 3,
         Acheter: false,
+        imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
       }
     ],
     dpc: 0,

@@ -10,18 +10,18 @@
       </tr>
       </thead>
       <tbody class="magasin-body">
-      <tr>
+      <tr v-for="(magasin, index) in props.infoMagasin" :key="index">
         <td>
           <div class="magasin-ligne">
             <img src="../assets/shopIcon/proteine.png"
                  alt="image de l'objet protéine, correspondant à l'amélioration N°1"
                  v-tooltip="'Acheter des protéines ajoute : 1 dpc'"/>
-            <p>0</p>
+            <p>0 {{ magasin.nom }}</p>
             <p>DPC : 0</p>
           </div>
         </td>
         <td>
-          <div v-for="index in 10" :key="index" class="upgrade-container">
+          <div v-for="y in props.infoMagasin[index].upgrade" :key="y" class="upgrade-container">
             <img src="../assets/shopIcon/proteine-upgrade.png"
                  alt="image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°1"
                  v-tooltip="'Acheter l\'amélioration de Protéine augment l\'efficacité de 50%'"
