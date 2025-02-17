@@ -46,12 +46,10 @@ const COULEUR_HAUT_HP = 'success'
 const COULEUR_MOYEN_HP = 'yellow'
 const COULEUR_BAS_HP = 'red'
 
-let debugFuncGagnerArgent = 0
-let debugFuncAttaquer = 0
-let debugNbreSacArgentTotal = 0
+const MONEY_BAG_MAX = 27
 
 const props = defineProps({
-  pokemonStore: Array,
+  pokemonStore: Object,
   infoJoueur: Array
 })
 
@@ -69,8 +67,6 @@ const randomPokemon = computed(() => {
 
 
 function gagnerArgent() {
-  console.log("Gagner argent a été appelé :" + ++debugFuncGagnerArgent)
-
   let argentTotal = (Math.floor(Math.random() * (ARGENT_MAX - ARGENT_MIN)) + 1) * props.infoJoueur[0].zoneEnCours
     + Math.ceil((randomPokemon.value.stats[0].base_stat * props.infoJoueur[0].zoneEnCours * 0.005));
 
@@ -81,9 +77,10 @@ function gagnerArgent() {
       y: Math.random() * -250, // Position Y aléatoire
       amount: Math.ceil(argentTotal / 3) // Argent réparti sur 3 sacs
     });
-    debugNbreSacArgentTotal++
+    if (moneyBags.value.length >= MONEY_BAG_MAX) {
+      collectMoney(0,moneyBags.value[0].amount)
+    }
   }
-  console.log("Sac d'argent créé au total :" + debugNbreSacArgentTotal)
 }
 
 function collectMoney(index, amount) {
@@ -94,7 +91,6 @@ function collectMoney(index, amount) {
 
 function attaquePokemon() {
   if (!isDying.value) {
-    console.log("Attaquer a été appelé :" + ++debugFuncAttaquer)
     randomPokemon.value.hp -= props.infoJoueur[0].attaque
     let pourcentagePv = Math.ceil(randomPokemon.value.hp / randomPokemon.value.stats[0].base_stat * 100)
 
@@ -141,9 +137,6 @@ function changePokemon() {
   }
 }
 
-onMounted(async () => {
-  await pokemonStore.fetchPokemon()
-});
 
 </script>
 
