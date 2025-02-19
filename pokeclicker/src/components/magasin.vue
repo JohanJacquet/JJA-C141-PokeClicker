@@ -14,22 +14,26 @@
         <td>
           <div class="magasin-ligne">
             <img :src="getImagePath(ligneMagasin.img)"
-                 :alt="ligneMagasin.alt"
-                 v-tooltip="ligneMagasin.tooltip"/>
+                 :alt="ligneMagasin.alt"/>
+            <v-tooltip class="tooltipMax" activator="parent" location="start">
+              {{ ligneMagasin.tooltip }}{{ getDegatObjet(ligneMagasin) }}
+            </v-tooltip>
             <p>{{ ligneMagasin.nbreAchat}} {{ ligneMagasin.nom }}</p>
-            <p>{{ ligneMagasin.typeDegat }} : {{ getDegatObjet(ligneMagasin) }}</p>
+            <p>{{ ligneMagasin.typeDegat }} : {{ props.getDegatTotalObjet(ligneMagasin) }}</p>
           </div>
         </td>
         <td>
           <div v-for="(upgrade, y) in ligneMagasin.upgrades" :key="y" class="upgrade-container">
             <img :src="getImagePath(upgrade.imgUpgrade)"
                  :alt="upgrade.altUpgrade"
-                 v-tooltip="upgrade.tooltipUpgrade"
                  class="upgrade-img"/>
+            <v-tooltip class="tooltipMax" activator="parent" location="start">
+              {{ upgrade.tooltipUpgrade }}
+            </v-tooltip>
           </div>
         </td>
         <td>
-          <v-btn class="btn-acheter">
+          <v-btn class="btn-acheter" @click="acheterObjet(ligneMagasin)">
             <p>
               <div>
                 Achetez
@@ -56,11 +60,16 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  getDegatTotalObjet: {
+    type: Function,
+    required: true,
+  }
 })
 
 const monArgent = computed(() => {
   return props.infoJoueur[0].argent
 })
+
 
 // Comme mon tableau utilise un chemin relatif, il me faut créer
 // un objet URL pour créer un chemin complet car :src à besoin
@@ -76,24 +85,37 @@ function getPrixObjet(ligneMagasin) {
   return Math.ceil(ligneMagasin.prixDefaut * Math.pow(ligneMagasin.multPrix, ligneMagasin.nbreAchat))
 }
 
- function getDegatObjet(ligneMagasin) {
-  let mult = 1
-  let degatDefaut = ligneMagasin.typeDegat === "DPC" ? ligneMagasin.dpc : ligneMagasin.dps
+// Récupère les dégats que donne un seul objet
+function getDegatObjet(ligneMagasin) {
 
-  console.log(ligneMagasin.upgrades[0].acheterUpgrade)
+  let degat = "0"
+  let mult = 1
+
   for (let upgrade of ligneMagasin.upgrades) {
     if (upgrade.acheterUpgrade === true) {
       mult += upgrade.multUpgrade
     }
   }
+  if (ligneMagasin.typeDegat === "DPC") {
+    degat = (ligneMagasin.dpc * mult) + " " + ligneMagasin.typeDegat
+  } else {
+    degat = (ligneMagasin.dps * mult) + " " + ligneMagasin.typeDegat
+  }
 
-  return Math.round((degatDefaut * ligneMagasin.nbreAchat) * mult)
+  return degat
 }
 
+function acheterObjet(ligneMagasin) {
+
+}
 
 </script>
 
 <style scoped lang="sass">
+.tooltipMax
+  width: 400px
+  max-width: 400px
+
 .magasin-ligne
   min-height: 130px
   align-content: center

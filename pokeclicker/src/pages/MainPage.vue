@@ -13,7 +13,8 @@
       <v-card-text class="pa-0">
         <v-tabs-window v-model="tab">
           <v-tabs-window-item value="one" class="magasin">
-            <magasin :infoMagasin="magasin" :infoJoueur="joueur"></magasin>
+            <magasin :infoMagasin="magasin" :infoJoueur="joueur"
+            :getDegatTotalObjet="getDegatTotalObjet"></magasin>
           </v-tabs-window-item>
           <v-tabs-window-item value="two">
             <div class="stat">
@@ -62,7 +63,7 @@ const magasin = reactive([
     nom: "Protéine",
     img: "../assets/shopIcon/proteine.png",
     alt: "image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°1",
-    tooltip: "Acheter des protéines ajoute : 1 dpc",
+    tooltip: "Acheter des protéines ajoute ",
     nbreAchat: 3,
     nbreAchatUpgrade: 0,
     upgrades: [
@@ -105,7 +106,7 @@ const magasin = reactive([
     img: "../assets/shopIcon/pichu.png",
     imgUpgrade: "../assets/shopIcon/pichu-upgrade.png",
     alt: "image du pokemon pichu, correspondant à l'amélioration N°2",
-    tooltip: "Acheter des Pichu ajoute : 5 dps",
+    tooltip: "Acheter des Pichu ajoute ",
     nbreAchat: 10,
     nbreAchatUpgrade: 0,
     upgrades: [
@@ -145,7 +146,7 @@ const emit = defineEmits(["update:videoBg"]); // Permet de mettre à jour la pro
 const clickCount = ref(0);
 
 
-// Permet de compter le nombre de clic sur l'onglet
+// Permet de compter le nombre de clic sur l'onglet pour faire un truc à la con qui sert à rien
 function incrementClickCount() {
   clickCount.value++;
 
@@ -155,6 +156,20 @@ function incrementClickCount() {
   }
 }
 
+// Calcule les dégats qu'un objet passé en paramètre fait et retourne ce nombre
+function getDegatTotalObjet(ligneMagasin) {
+  let mult = 1
+  let degatDefaut = ligneMagasin.typeDegat === "DPC" ? ligneMagasin.dpc : ligneMagasin.dps
+
+  for (let upgrade of ligneMagasin.upgrades) {
+    if (upgrade.acheterUpgrade === true) {
+      mult += upgrade.multUpgrade
+    }
+  }
+
+
+  return Math.round((degatDefaut * ligneMagasin.nbreAchat) * mult)
+}
 
 function changePokemon() {
   if (pokemonStore.pokemons.length > 0) {
