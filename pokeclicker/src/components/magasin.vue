@@ -10,22 +10,21 @@
       </tr>
       </thead>
       <tbody class="magasin-body">
-      <tr v-for="(magasin, index) in props.infoMagasin" :key="index">
+      <tr v-for="(ligneMagasin, index) in props.infoMagasin" :key="index">
         <td>
           <div class="magasin-ligne">
-            <img src="../assets/shopIcon/proteine.png"
-                 alt="image de l'objet protéine, correspondant à l'amélioration N°1"
-                 v-tooltip="'Acheter des protéines ajoute : 1 dpc'"/>
-            <p>0 {{ magasin.nom }}</p>
-            <p>DPC : 0</p>
+            <img :src="getImagePath(ligneMagasin.img)"
+                 :alt="ligneMagasin.alt"
+                 v-tooltip="ligneMagasin.tooltip"/>
+            <p>{{ ligneMagasin.nbreAchat}} {{ ligneMagasin.nom }}</p>
+            <p>{{ ligneMagasin.typeDegat }} : {{ getDegatObjet(ligneMagasin) }}</p>
           </div>
         </td>
         <td>
-          <div v-for="y in props.infoMagasin[index].upgrade" :key="y" class="upgrade-container">
-            <img src="../assets/shopIcon/proteine-upgrade.png"
-                 alt="image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°1"
-                 v-tooltip="'Acheter l\'amélioration de Protéine augment l\'efficacité de 50%'"
-                 content-class="custom-tooltip"
+          <div v-for="(upgrade, y) in ligneMagasin.upgrades" :key="y" class="upgrade-container">
+            <img :src="getImagePath(upgrade.imgUpgrade)"
+                 :alt="upgrade.altUpgrade"
+                 v-tooltip="upgrade.tooltipUpgrade"
                  class="upgrade-img"/>
           </div>
         </td>
@@ -36,7 +35,7 @@
                 Achetez
               </div>
               <div class="upgrade-prix">
-                999
+                {{ getPrixObjet(ligneMagasin) }}
               </div>
             </p>
           </v-btn>
@@ -49,15 +48,49 @@
 
 <script setup>
 const props = defineProps({
-  infoJoueur: Array,
-  infoMagasin: Array,
+  infoJoueur: {
+    type: Array,
+    required: true,
+  },
+  infoMagasin: {
+    type: Array,
+    required: true,
+  },
 })
-
-
 
 const monArgent = computed(() => {
   return props.infoJoueur[0].argent
 })
+
+// Comme mon tableau utilise un chemin relatif, il me faut créer
+// un objet URL pour créer un chemin complet car :src à besoin
+// d'un chemin absolute pour fonctionner
+function getImagePath(path) {
+  return new URL(path, import.meta.url).href;
+}
+
+// Calcule le prix d'un objet au magasin en prenant en compte, son prix, le nombre de fois acheté et un mutliplicateur
+// qui permet d'augmenter son prix
+// prend en paramètre la ligne en cours dont on veut le prix
+function getPrixObjet(ligneMagasin) {
+  return Math.ceil(ligneMagasin.prixDefaut * Math.pow(ligneMagasin.multPrix, ligneMagasin.nbreAchat))
+}
+
+ function getDegatObjet(ligneMagasin) {
+  let mult = 1
+  let degatDefaut = ligneMagasin.typeDegat === "DPC" ? ligneMagasin.dpc : ligneMagasin.dps
+
+  for (const upgrade in ligneMagasin.upgrades) {
+    if (upgrade.acheterUpgrade) {
+      mult += upgrade.multUpgrade
+    }
+  }
+
+
+  return Math.round((degatDefaut * ligneMagasin.nbreAchat) * mult)
+}
+
+
 </script>
 
 <style scoped lang="sass">
