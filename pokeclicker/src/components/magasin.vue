@@ -85,6 +85,7 @@ function getPrixObjet(ligneMagasin) {
   return Math.ceil(ligneMagasin.prixDefaut * Math.pow(ligneMagasin.multPrix, ligneMagasin.nbreAchat))
 }
 
+
 // Récupère les dégats que donne un seul objet
 function getDegatObjet(ligneMagasin) {
 
@@ -106,7 +107,8 @@ function getDegatObjet(ligneMagasin) {
 }
 
 function acheterObjet(ligneMagasin) {
-
+  console.log(getPrixObjet(ligneMagasin))
+  ligneMagasin.nbreAchat += 1
 }
 
 </script>

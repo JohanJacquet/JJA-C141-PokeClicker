@@ -12,7 +12,6 @@
       </ul>
     </v-btn>
     <v-progress-linear
-      @click="changePokemon"
       :color="couleurPokemon"
       :model-value="viePokemonAff"
       class="pokemon-progress"
@@ -29,7 +28,6 @@
         @mouseenter="collectMoney(index, bag.amount)"
       />
     </div>
-
   </div>
 </template>
 
@@ -118,25 +116,6 @@ function attaquePokemon() {
     }
   }
 }
-
-function changePokemon() {
-  if (props.pokemonStore.pokemons.length > 0) {
-    // Récupère un pokemon aléatoire du tableau de pokemon
-    const randomPoke = JSON.parse(JSON.stringify(props.pokemonStore.pokemons[Math.floor(Math.random() * props.pokemonStore.pokemons.length)]));
-
-    // Recalcule les hp du pokemon en tenant compte de la zone
-    randomPoke.hp = randomPoke.stats[0].base_stat * props.infoJoueur[0].zoneEnCours
-    randomPoke.stats[0].base_stat = randomPoke.stats[0].base_stat * props.infoJoueur[0].zoneEnCours
-
-    // Affecte le nouveau pokemon au pokemon actuelle
-    randomPokemon.value = randomPoke;
-
-    // Remet l'affichage des PV par défaut
-    viePokemonAff.value = 100
-    couleurPokemon.value = COULEUR_HAUT_HP
-  }
-}
-
 
 </script>
 
