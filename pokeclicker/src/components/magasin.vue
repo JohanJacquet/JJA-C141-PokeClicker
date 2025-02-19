@@ -80,12 +80,12 @@ function getPrixObjet(ligneMagasin) {
   let mult = 1
   let degatDefaut = ligneMagasin.typeDegat === "DPC" ? ligneMagasin.dpc : ligneMagasin.dps
 
-  for (const upgrade in ligneMagasin.upgrades) {
-    if (upgrade.acheterUpgrade) {
+  console.log(ligneMagasin.upgrades[0].acheterUpgrade)
+  for (let upgrade of ligneMagasin.upgrades) {
+    if (upgrade.acheterUpgrade === true) {
       mult += upgrade.multUpgrade
     }
   }
-
 
   return Math.round((degatDefaut * ligneMagasin.nbreAchat) * mult)
 }
