@@ -1,6 +1,6 @@
 <template>
   <div class="magasin-container">
-    <p class="ma-2">PokeDollar : {{ monArgent }}</p>
+    <p class="ma-2">PokeDollar : {{ props.infoJoueur[0].argent}}</p>
     <v-table class="custom-table">
       <thead class="magasin-head">
       <tr>
@@ -23,23 +23,25 @@
           </div>
         </td>
         <td>
-          <div v-for="(upgrade, y) in ligneMagasin.upgrades" :key="y" class="upgrade-container">
+          <div v-for="(upgrade, y) in ligneMagasin.upgrades" :key="y" class="upgrade-container"
+               :class="{ 'erreurUpgrade': upgrade.erreur }">
             <img :src="getImagePath(upgrade.imgUpgrade)"
                  :alt="upgrade.altUpgrade"
+                 @click="acheterUpgrade(upgrade, ligneMagasin.nbreAchat)"
                  class="upgrade-img"/>
             <v-tooltip class="tooltipMax" activator="parent" location="start">
-              {{ upgrade.tooltipUpgrade }}
+              {{ upgrade.tooltipUpgrade }} <br><br> <span class="float-right">{{ upgrade.prixUpgrade }}₽</span>
             </v-tooltip>
           </div>
         </td>
         <td>
-          <v-btn class="btn-acheter" @click="acheterObjet(ligneMagasin)">
+          <v-btn class="btn-acheter" :class="{ 'erreur': ligneMagasin.erreur }" @click="acheterObjet(ligneMagasin)">
             <p>
               <div>
                 Achetez
               </div>
               <div class="upgrade-prix">
-                {{ getPrixObjet(ligneMagasin) }}
+                {{ getPrixObjet(ligneMagasin) }}₽
               </div>
             </p>
           </v-btn>
@@ -66,10 +68,10 @@ const props = defineProps({
   }
 })
 
-const monArgent = computed(() => {
-  return props.infoJoueur[0].argent
-})
 
+const NBRE_CLIGNOTEMENT = 4
+
+const erreurAchat = ref(false)
 
 // Comme mon tableau utilise un chemin relatif, il me faut créer
 // un objet URL pour créer un chemin complet car :src à besoin
@@ -82,7 +84,8 @@ function getImagePath(path) {
 // qui permet d'augmenter son prix
 // prend en paramètre la ligne en cours dont on veut le prix
 function getPrixObjet(ligneMagasin) {
-  return Math.ceil(ligneMagasin.prixDefaut * Math.pow(ligneMagasin.multPrix, ligneMagasin.nbreAchat))
+  ligneMagasin.prixEnCours = Math.ceil(ligneMagasin.prixDefaut * Math.pow(ligneMagasin.multPrix, ligneMagasin.nbreAchat))
+  return ligneMagasin.prixEnCours
 }
 
 
@@ -106,14 +109,51 @@ function getDegatObjet(ligneMagasin) {
   return degat
 }
 
+// Permet d'acheter un objet dans le magasin en retirant l'argent du joueur
 function acheterObjet(ligneMagasin) {
-  console.log(getPrixObjet(ligneMagasin))
-  ligneMagasin.nbreAchat += 1
+  if (props.infoJoueur[0].argent >= ligneMagasin.prixEnCours) {
+    ligneMagasin.nbreAchat += 1
+    props.infoJoueur[0].argent -= ligneMagasin.prixEnCours
+  } else {
+    clignoterObjet(ligneMagasin)
+  }
 }
+
+function acheterUpgrade(upgrade, nbreAchat) {
+  if (props.infoJoueur[0].argent >= upgrade.prixUpgrade
+    && upgrade.acheterUpgrade !== true
+    && upgrade.nbreAchatRequis <= nbreAchat) {
+    upgrade.acheterUpgrade = true
+    props.infoJoueur[0].argent -= upgrade.prixUpgrade
+  } else {
+    clignoterObjet(upgrade)
+  }
+}
+
+function clignoterObjet(objet) {
+  let count = 0;
+  const interval = setInterval(() => {
+    objet.erreur = !objet.erreur; // Alterne true/false
+    count++;
+
+    if (count >= NBRE_CLIGNOTEMENT * 2) {
+      clearInterval(interval);
+      objet.erreur = false; // Remet à normal
+    }
+  }, 150);
+}
+
+
 
 </script>
 
 <style scoped lang="sass">
+.erreurUpgrade
+  background-color: red !important
+
+.erreur
+  background: red
+
 .tooltipMax
   width: 400px
   max-width: 400px
