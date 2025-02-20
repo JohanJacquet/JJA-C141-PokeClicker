@@ -49,7 +49,7 @@ const props = defineProps({
 })
 
 const joueur = reactive([{
-  argent: 0,
+  argent: 9999,
   attaque: 20,
   critChance: 1,
   critMult: 2,
@@ -74,7 +74,7 @@ const magasin = reactive([
         acheterUpgrade: false,
         imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
         altUpgrade: "image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°1",
-        tooltipUpgrade: "Acheter l\'amélioration de Protéine augmente l\'efficacité de base par 50%",
+        tooltipUpgrade: "Acheter l\'amélioration de Protéine augmente l\'efficacité de base par 50%.",
         erreur: false,
       },
       {
@@ -84,7 +84,7 @@ const magasin = reactive([
         acheterUpgrade: false,
         imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
         altUpgrade: "image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°1",
-        tooltipUpgrade: "Acheter l\'amélioration de Protéine augmente l\'efficacité de base par 100%",
+        tooltipUpgrade: "Acheter l\'amélioration de Protéine augmente l\'efficacité de base par 100%.",
         erreur: false,
       },
       {
@@ -94,7 +94,7 @@ const magasin = reactive([
         acheterUpgrade: false,
         imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
         altUpgrade: "image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°1",
-        tooltipUpgrade: "Acheter l\'amélioration de Protéine augmente l\'efficacité de base par 150%",
+        tooltipUpgrade: "Acheter l\'amélioration de Protéine augmente l\'efficacité de base par 150%.",
         erreur: false,
       }
     ],
@@ -105,6 +105,7 @@ const magasin = reactive([
     multPrix: 1.07,
     prixEnCours: 0,
     erreur: false,
+    valide: false,
   },
   {
     nom: "Pichu",
@@ -122,7 +123,7 @@ const magasin = reactive([
         acheterUpgrade: false,
         imgUpgrade: "../assets/shopIcon/pichu-upgrade.png",
         altUpgrade: "image de l'amélioration du pokemon Pichu, correspondant à l'amélioration N°2",
-        tooltipUpgrade: "Acheter l\'amélioration de Pichu augmente l\'efficacité de base par 100%",
+        tooltipUpgrade: "Acheter l\'amélioration de Pichu augmente l\'efficacité de base par 100%.",
         erreur: false,
       },
       {
@@ -132,7 +133,7 @@ const magasin = reactive([
         acheterUpgrade: false,
         imgUpgrade: "../assets/shopIcon/pichu-upgrade.png",
         altUpgrade: "image de l'amélioration du pokemon Pichu, correspondant à l'amélioration N°2",
-        tooltipUpgrade: "Acheter l\'amélioration de Pichu augmente l\'efficacité de base par 200%",
+        tooltipUpgrade: "Acheter l\'amélioration de Pichu augmente l\'efficacité de base par 200%.",
         erreur: false,
       }
     ],
@@ -143,6 +144,7 @@ const magasin = reactive([
     multPrix: 1.09,
     prixEnCours: 0,
     erreur: false,
+    valide: false,
   },
 ]);
 

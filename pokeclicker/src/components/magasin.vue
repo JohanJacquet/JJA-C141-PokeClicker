@@ -24,18 +24,19 @@
         </td>
         <td>
           <div v-for="(upgrade, y) in ligneMagasin.upgrades" :key="y" class="upgrade-container"
-               :class="{ 'erreurUpgrade': upgrade.erreur }">
+               :class="{ 'erreur': upgrade.erreur, 'pas-Acheter': !upgrade.acheterUpgrade }"
+                v-show="!cacherAmelioration(y,ligneMagasin)">
             <img :src="getImagePath(upgrade.imgUpgrade)"
                  :alt="upgrade.altUpgrade"
-                 @click="acheterUpgrade(upgrade, ligneMagasin.nbreAchat)"
+                 @click="acheterUpgrade(upgrade, ligneMagasin, y)"
                  class="upgrade-img"/>
             <v-tooltip class="tooltipMax" activator="parent" location="start">
-              {{ upgrade.tooltipUpgrade }} <br><br> <span class="float-right">{{ upgrade.prixUpgrade }}₽</span>
+              {{ upgrade.tooltipUpgrade }} <br><span class="float-left">{{ligneMagasin.nbreAchat}}/{{ upgrade.nbreAchatRequis }} achat</span><br> <span class="float-right">{{ upgrade.prixUpgrade }}₽</span>
             </v-tooltip>
           </div>
         </td>
         <td>
-          <v-btn class="btn-acheter" :class="{ 'erreur': ligneMagasin.erreur }" @click="acheterObjet(ligneMagasin)">
+          <v-btn class="btn-acheter" :class="{ 'erreur': ligneMagasin.erreur, 'achat-Valide': ligneMagasin.valide }" @click="acheterObjet(ligneMagasin)">
             <p>
               <div>
                 Achetez
@@ -114,23 +115,42 @@ function acheterObjet(ligneMagasin) {
   if (props.infoJoueur[0].argent >= ligneMagasin.prixEnCours) {
     ligneMagasin.nbreAchat += 1
     props.infoJoueur[0].argent -= ligneMagasin.prixEnCours
+    clignoterObjetValide(ligneMagasin)
   } else {
-    clignoterObjet(ligneMagasin)
+    clignoterObjetErreur(ligneMagasin)
   }
 }
 
-function acheterUpgrade(upgrade, nbreAchat) {
+function acheterUpgrade(upgrade, ligneMagasin, index) {
+  // Si l'amélioration es déjà acheté, ne fait rien
+  if (upgrade.acheterUpgrade) {
+    return
+  }
+
+  // Si ce n'est pas la 1ère amélioration, vérifie si la précédent à été acheté sinon empêche
+  if (index > 0) {
+    if (!ligneMagasin.upgrades[index-1].acheterUpgrade) {
+      clignoterObjetErreur(upgrade)
+      return
+    }
+  }
+
+
+  // Vérifie que :
+  // Le joueur a assez d'argent
+  // Que l'amélioration n'est pas déjà acheté
+  // Que le nombre d'achat requis est suffisant
   if (props.infoJoueur[0].argent >= upgrade.prixUpgrade
     && upgrade.acheterUpgrade !== true
-    && upgrade.nbreAchatRequis <= nbreAchat) {
+    && upgrade.nbreAchatRequis <= ligneMagasin.nbreAchat) {
     upgrade.acheterUpgrade = true
     props.infoJoueur[0].argent -= upgrade.prixUpgrade
   } else {
-    clignoterObjet(upgrade)
+    clignoterObjetErreur(upgrade)
   }
 }
 
-function clignoterObjet(objet) {
+function clignoterObjetErreur(objet) {
   let count = 0;
   const interval = setInterval(() => {
     objet.erreur = !objet.erreur; // Alterne true/false
@@ -143,16 +163,32 @@ function clignoterObjet(objet) {
   }, 150);
 }
 
+function clignoterObjetValide(objet) {
+  objet.valide = true; // Active la classe
+  setTimeout(() => {
+    objet.valide = false; // Désactive après 150ms
+  }, 150);
+}
 
+// Permet de cachet les amélioration si les précédente ne sont pas acheté
+function cacherAmelioration(index, ligneMagasin) {
+  let pasAfficher = false
+
+  // Vérifie si l'amélioration précédente est acheté pour savoir si on doit afficher l'amélioration courante
+  if (index <= 0) {
+    pasAfficher = false
+  } else if (ligneMagasin.upgrades[index-1].acheterUpgrade) {
+    pasAfficher = false
+  } else {
+    pasAfficher = true
+  }
+
+  return pasAfficher
+}
 
 </script>
 
 <style scoped lang="sass">
-.erreurUpgrade
-  background-color: red !important
-
-.erreur
-  background: red
 
 .tooltipMax
   width: 400px
@@ -202,6 +238,7 @@ tbody
 .upgrade-container
   border: gold 4px solid
   background-color: rgba(180,180,180,0.2)
+  float: left
   width: 9%
   margin: 10px 2px
   display: inline-block
@@ -234,4 +271,15 @@ table tr td:nth-child(1)
 
 table tr td:nth-child(2)
   width: 70%
+
+
+.pas-Acheter
+  filter: brightness(50%)
+
+.achat-Valide
+  background: green
+
+.erreur
+  background: red !important
+
 </style>
