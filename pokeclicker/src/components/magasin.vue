@@ -31,7 +31,7 @@
                  @click="acheterUpgrade(upgrade, ligneMagasin, y)"
                  class="upgrade-img"/>
             <v-tooltip class="tooltipMax" activator="parent" location="start">
-              {{ upgrade.tooltipUpgrade }} <br><span class="float-left">{{ligneMagasin.nbreAchat}}/{{ upgrade.nbreAchatRequis }} achat</span><br> <span class="float-right">{{ upgrade.prixUpgrade }}₽</span>
+              {{ upgrade.tooltipUpgrade }} <br><span class="float-left"></span><br>{{ligneMagasin.nbreAchat}}/{{ upgrade.nbreAchatRequis }} achat <span class="float-right">{{ upgrade.prixUpgrade }}₽</span>
             </v-tooltip>
           </div>
         </td>
@@ -191,8 +191,9 @@ function cacherAmelioration(index, ligneMagasin) {
 <style scoped lang="sass">
 
 .tooltipMax
-  width: 400px
-  max-width: 400px
+  width: auto !important
+  max-width: 1000px !important
+
 
 .magasin-ligne
   min-height: 130px
