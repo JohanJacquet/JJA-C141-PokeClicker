@@ -1,6 +1,6 @@
 <template>
   <div class="pokemon-container">
-    <v-btn @click="attaquePokemon" class="bg-white pokemon-btn">
+    <v-btn @click="attaquePokemon" class="bg-white pokemon-btn" @mousemove="updateCursorPosition">
       <ul>
         <li>
           <img :src="randomPokemon?.image" :alt="randomPokemon?.name"
@@ -18,6 +18,9 @@
       height="20"
       striped
     />
+    <div class="damage-text" v-if="damageTextVisible" :style="{ left: cursorPosition.x + 'px', top: cursorPosition.y + 'px' }">
+      {{ damageText }}
+    </div>
     <div class="money-bags-container">
       <img
         v-for="(bag, index) in moneyBags"
@@ -31,19 +34,15 @@
   </div>
 </template>
 
-
-
 <script setup>
-import {onMounted} from "vue";
-import {usePokemonStore} from "@/stores/pokemonStore";
+import { ref, computed } from "vue";
+import { usePokemonStore } from "@/stores/pokemonStore";
 
 const ARGENT_MIN = 2
 const ARGENT_MAX = 5
-
 const COULEUR_HAUT_HP = 'success'
 const COULEUR_MOYEN_HP = 'yellow'
 const COULEUR_BAS_HP = 'red'
-
 const MONEY_BAG_MAX = 27
 
 const props = defineProps({
@@ -71,12 +70,14 @@ const viePokemonAff = ref(100)
 const couleurPokemon = ref(COULEUR_HAUT_HP)
 const isDying = ref(false);
 const moneyBags = ref([]); // Stocke les sacs d'argent
+const damageText = ref(""); // Texte des dégâts
+const damageTextVisible = ref(false); // Indicateur pour afficher/masquer le texte
+const cursorPosition = ref({ x: 0, y: 0 }); // Position du curseur
 
 // Utilisation du getter pour obtenir un Pokémon aléatoire
 const randomPokemon = computed(() => {
   return props.infoJoueur[0].pokemonEnCours
 });
-
 
 function gagnerArgent() {
   let argentTotal = (Math.floor(Math.random() * (ARGENT_MAX - ARGENT_MIN)) + 1) * props.infoJoueur[0].zoneEnCours
@@ -90,7 +91,7 @@ function gagnerArgent() {
       amount: Math.ceil(argentTotal / 3) // Argent réparti sur 3 sacs
     });
     if (moneyBags.value.length >= MONEY_BAG_MAX) {
-      collectMoney(0,moneyBags.value[0].amount)
+      collectMoney(0, moneyBags.value[0].amount)
     }
   }
 }
@@ -100,7 +101,6 @@ function collectMoney(index, amount) {
   moneyBags.value.splice(index, 1); // Supprime le sac
 }
 
-
 function attaquePokemon() {
   if (!isDying.value) {
     randomPokemon.value.hp -= props.infoJoueur[0].attaque
@@ -108,9 +108,17 @@ function attaquePokemon() {
 
     viePokemonAff.value = pourcentagePv
 
-    // Modifie la couleur de la bar de vie selon les PV manquant du pokemon
-    if (pourcentagePv <= 0) {
+    // Afficher les dégâts avec un - devant
+    damageText.value = `-${props.infoJoueur[0].attaque}`;
+    damageTextVisible.value = true;
 
+    // Masquer le texte après 1 seconde
+    setTimeout(() => {
+      damageTextVisible.value = false;
+    }, 1000);
+
+    // Modifie la couleur de la barre de vie selon les PV manquants du Pokémon
+    if (pourcentagePv <= 0) {
       isDying.value = true; // Active la classe rouge
 
       setTimeout(() => {
@@ -131,8 +139,10 @@ function attaquePokemon() {
   }
 }
 
+function updateCursorPosition(event) {
+  cursorPosition.value = { x: event.clientX + 10, y: event.clientY + 10 }; // Décale le texte des dégâts de 10px autour du curseur
+}
 </script>
-
 
 <style scoped lang="sass">
 .money-bags-container
@@ -140,7 +150,6 @@ function attaquePokemon() {
   width: 320px
   height: 300px
   pointer-events: none
-// Empêche les sacs de bloquer les clics
 
 .money-bag
   position: absolute
@@ -148,30 +157,25 @@ function attaquePokemon() {
   height: 40px
   cursor: pointer
   pointer-events: auto
-  // Permet d'interagir avec les sacs
   transition: transform 0.2s ease, opacity 0.2s ease
 
   &:hover
     transform: scale(1.2) rotate(-10deg)
     opacity: 0.7
 
-
 .dying
   filter: brightness(0.3) sepia(1) hue-rotate(-50deg) saturate(10) !important
   transform: rotate(90deg) scale(1.1)
   transition: all 0.3s ease
 
-
 .pokemon-container
   width: 320px
-
 
   .pokemon-btn
     width: 320px
     height: 200px
     display: block
     font-size: 18px
-
 
 img
   display: block
@@ -186,4 +190,21 @@ ul
 .pokemon-progress
   background-color: rgba(0, 0, 0, 0.7)
 
+.damage-text
+  position: absolute
+  font-size: 20px
+  color: red
+  font-weight: bold
+  pointer-events: none // Empêche l'interaction avec le texte
+  z-index: 10
+  animation: jumpAndFall 1s ease-out
+
+@keyframes jumpAndFall
+  0%
+    transform: translateY(0)
+  50%
+    transform: translateY(-30px) // Le texte saute
+  100%
+    transform: translateY(30px) // Le texte retombe
+    opacity: 0 // Le texte disparaît
 </style>
