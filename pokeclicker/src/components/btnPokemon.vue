@@ -103,19 +103,19 @@ function collectMoney(index, amount) {
 
 function attaquePokemon() {
   if (!isDying.value) {
-    randomPokemon.value.hp -= props.infoJoueur[0].attaque
+    randomPokemon.value.hp -= props.dpcJoueur; // Utilisation de dpcJoueur pour les dégâts infligés
     let pourcentagePv = Math.ceil(randomPokemon.value.hp / randomPokemon.value.stats[0].base_stat * 100)
 
     viePokemonAff.value = pourcentagePv
 
     // Afficher les dégâts avec un - devant
-    damageText.value = `-${props.infoJoueur[0].attaque}`;
+    damageText.value = `-${props.dpcJoueur}`;
     damageTextVisible.value = true;
 
-    // Masquer le texte après 1 seconde
+    // Masquer le texte après 500ms pour une animation plus rapide
     setTimeout(() => {
       damageTextVisible.value = false;
-    }, 1000);
+    }, 150); // Réduit la durée pour rendre l'animation plus réactive
 
     // Modifie la couleur de la barre de vie selon les PV manquants du Pokémon
     if (pourcentagePv <= 0) {
@@ -197,7 +197,7 @@ ul
   font-weight: bold
   pointer-events: none // Empêche l'interaction avec le texte
   z-index: 10
-  animation: jumpAndFall 1s ease-out
+  animation: jumpAndFall 0.5s ease-out // Animation plus rapide
 
 @keyframes jumpAndFall
   0%
