@@ -13,8 +13,11 @@
       <v-card-text class="pa-0">
         <v-tabs-window v-model="tab">
           <v-tabs-window-item value="one" class="magasin">
-            <magasin :infoMagasin="magasin" :infoJoueur="joueur"
-            :getDegatTotalObjet="getDegatTotalObjet"></magasin>
+            <magasin :infoMagasin="magasin"
+                     :infoJoueur="joueur"
+                     :getDegatTotalObjet="getDegatTotalObjet"
+                     :dpcJoueur="joueurDPC"
+                     :dpsJoueur="joueurDPS"></magasin>
           </v-tabs-window-item>
           <v-tabs-window-item value="two">
             <div class="stat">
@@ -42,7 +45,7 @@ import Statistique from "@/components/statistique.vue";
 import CarouselZone from "@/components/carouselZone.vue";
 import Magasin from "@/components/magasin.vue";
 import {usePokemonStore} from "@/stores/pokemonStore.js";
-import {onMounted} from "vue";
+import {onMounted, ref, computed, reactive} from "vue";
 
 const props = defineProps({
   videoBg: Boolean,
@@ -156,6 +159,23 @@ const tab = ref(null);
 const emit = defineEmits(["update:videoBg"]); // Permet de mettre à jour la prop dans App.vue
 const clickCount = ref(0);
 
+const joueurDPC = computed(() => {
+  let totalDPC = 0
+  for (let ligneMagasin of magasin) {
+    totalDPC += getDegatTotalObjet(ligneMagasin, "DPC")
+  }
+
+  return totalDPC + joueur[0].attaque
+})
+
+const joueurDPS = computed(() => {
+  let totalDPS = 0
+  for (let ligneMagasin of magasin) {
+    totalDPS += getDegatTotalObjet(ligneMagasin, "DPS")
+  }
+
+  return totalDPS
+})
 
 // Permet de compter le nombre de clic sur l'onglet pour faire un truc à la con qui sert à rien
 function incrementClickCount() {
@@ -168,16 +188,28 @@ function incrementClickCount() {
 }
 
 // Calcule les dégats qu'un objet passé en paramètre fait et retourne ce nombre
-function getDegatTotalObjet(ligneMagasin) {
-  let mult = 1
-  let degatDefaut = ligneMagasin.typeDegat === "DPC" ? ligneMagasin.dpc : ligneMagasin.dps
+// Permet de filtrer soit "DPS" ou "DPC" pour permet de calculer uniquement les objets
+// d'un certain type
+function getDegatTotalObjet(ligneMagasin, filtre) {
 
-  for (let upgrade of ligneMagasin.upgrades) {
-    if (upgrade.acheterUpgrade === true) {
-      mult += upgrade.multUpgrade
+  // retourne 0 si l'objet ne correspond pas au filtre voulu (degat par clic ou degat par seconde
+  let typeDegat = ligneMagasin.typeDegat
+  if (filtre !== undefined) {
+    if ((typeDegat === "DPC" && filtre === "DPS") || (typeDegat === "DPS" && filtre === "DPC")) {
+      return 0
     }
   }
 
+  let mult = 1
+  let degatDefaut = ligneMagasin.typeDegat === "DPC" ? ligneMagasin.dpc : ligneMagasin.dps
+
+    console.log(filtre)
+    for (let upgrade of ligneMagasin.upgrades) {
+      if (upgrade.acheterUpgrade === true) {
+        mult += upgrade.multUpgrade
+      }
+
+  }
 
   return Math.round((degatDefaut * ligneMagasin.nbreAchat) * mult)
 }

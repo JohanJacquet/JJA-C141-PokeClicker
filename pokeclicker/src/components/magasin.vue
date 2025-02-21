@@ -1,6 +1,6 @@
 <template>
   <div class="magasin-container">
-    <p class="ma-2">PokeDollar : {{ props.infoJoueur[0].argent}}</p>
+    <p class="ma-2">PokeDollar : {{ props.infoJoueur[0].argent}} et un DPC de {{ dpcJoueur }} et un DPS de {{ dpsJoueur }}</p>
     <v-table class="custom-table">
       <thead class="magasin-head">
       <tr>
@@ -65,6 +65,14 @@ const props = defineProps({
   },
   getDegatTotalObjet: {
     type: Function,
+    required: true,
+  },
+  dpcJoueur: {
+    type: Number,
+    required: true,
+  },
+  dpsJoueur: {
+    type: Number,
     required: true,
   }
 })
