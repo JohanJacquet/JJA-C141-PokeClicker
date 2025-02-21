@@ -47,8 +47,22 @@ const COULEUR_BAS_HP = 'red'
 const MONEY_BAG_MAX = 27
 
 const props = defineProps({
-  pokemonStore: Object,
-  infoJoueur: Array
+  pokemonStore: {
+    type: Object,
+    required: true,
+  },
+  infoJoueur: {
+    type: Array,
+    required: true,
+  },
+  dpcJoueur: {
+    type: Number,
+    required: true,
+  },
+  dpsJoueur: {
+    type: Number,
+    required: true,
+  }
 })
 
 const emit = defineEmits(["changerPokemon"])
