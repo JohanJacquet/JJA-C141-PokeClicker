@@ -201,10 +201,10 @@ ul
 
 @keyframes jumpAndFall
   0%
-    transform: translateY(0)
+    transform: translateY(0) translateX(0)
   50%
-    transform: translateY(-30px) // Le texte saute
+    transform: translateY(-30px) translateX(10px) // Le texte saute et se décale à droite
   100%
-    transform: translateY(30px) // Le texte retombe
+    transform: translateY(30px) translateX(20px) // Le texte retombe plus loin à droite
     opacity: 0 // Le texte disparaît
 </style>
