@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onUnmounted } from "vue";
 import { usePokemonStore } from "@/stores/pokemonStore";
 
 const ARGENT_MIN = 2
@@ -73,6 +73,8 @@ const moneyBags = ref([]); // Stocke les sacs d'argent
 const damageText = ref(""); // Texte des dégâts
 const damageTextVisible = ref(false); // Indicateur pour afficher/masquer le texte
 const cursorPosition = ref({ x: 0, y: 0 }); // Position du curseur
+
+let intervalId = null;
 
 // Utilisation du getter pour obtenir un Pokémon aléatoire
 const randomPokemon = computed(() => {
@@ -139,9 +141,47 @@ function attaquePokemon() {
   }
 }
 
+function attaqueDPSPokemon() {
+  if (!isDying.value) {
+    randomPokemon.value.hp -= props.dpsJoueur; // Utilisation de dpcJoueur pour les dégâts infligés
+    let pourcentagePv = Math.ceil(randomPokemon.value.hp / randomPokemon.value.stats[0].base_stat * 100)
+
+    viePokemonAff.value = pourcentagePv
+
+    // Modifie la couleur de la barre de vie selon les PV manquants du Pokémon
+    if (pourcentagePv <= 0) {
+      isDying.value = true; // Active la classe rouge
+
+      setTimeout(() => {
+        gagnerArgent();
+        emit("changerPokemon");
+        viePokemonAff.value = 100;
+        isDying.value = false; // Désactive la classe après 300ms
+      }, 300); // Durée de l'effet rouge (300ms)
+
+      viePokemonAff.value = 100
+      couleurPokemon.value = COULEUR_HAUT_HP
+    } else if (pourcentagePv <= 30) {
+      couleurPokemon.value = COULEUR_BAS_HP
+    } else if (pourcentagePv <= 50) {
+      couleurPokemon.value = COULEUR_MOYEN_HP
+    }
+  }
+}
+
 function updateCursorPosition(event) {
   cursorPosition.value = { x: event.clientX + 10, y: event.clientY + 10 }; // Décale le texte des dégâts de 10px autour du curseur
 }
+
+onMounted(() => {
+  intervalId = setInterval(() => {
+    attaqueDPSPokemon()
+  }, 1000);
+});
+
+onUnmounted(() => {
+  clearInterval(intervalId);
+});
 </script>
 
 <style scoped lang="sass">

@@ -207,7 +207,6 @@ function getDegatTotalObjet(ligneMagasin, filtre) {
   let mult = 1
   let degatDefaut = ligneMagasin.typeDegat === "DPC" ? ligneMagasin.dpc : ligneMagasin.dps
 
-    console.log(filtre)
     for (let upgrade of ligneMagasin.upgrades) {
       if (upgrade.acheterUpgrade === true) {
         mult += upgrade.multUpgrade
