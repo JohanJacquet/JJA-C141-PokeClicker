@@ -4,10 +4,10 @@
       <v-carousel-item>
         <ul>
           <li>
-            <img src="../assets/roadIcon/basic.png" height="56" width="56"/>
+            <img src="../assets/roadIcon/basic.png" alt="image correspondant à la route en cours" height="56" width="56"/>
           </li>
           <li>
-            <p>9999</p>
+            <p>1</p>
           </li>
         </ul>
       </v-carousel-item>

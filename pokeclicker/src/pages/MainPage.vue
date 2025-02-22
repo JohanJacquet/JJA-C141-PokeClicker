@@ -33,7 +33,8 @@
 
     <!-- Partie droite -->
     <div class="right-container">
-      <carousel-zone class="carousel"></carousel-zone>
+      <carousel-zone class="carousel"
+                   :infoJoueur="joueur"></carousel-zone>
       <btn-pokemon class="btn" @changerPokemon="changePokemon"
                    :infoJoueur="joueur"
                    :pokemonStore="pokemonStore"
