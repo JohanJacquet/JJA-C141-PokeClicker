@@ -1,30 +1,64 @@
 <template>
   <div class="zone-container">
-    <v-carousel hide-delimiters class="carousel" height="auto">
-      <v-carousel-item>
+    <v-carousel v-model="zoneEnCours" hide-delimiters :show-arrows="false" class="carousel" height="auto">
+      <v-carousel-item v-for="(zone, index) in props.infoJoueur[0].zoneMax" :key="index">
         <ul>
           <li>
             <img src="../assets/roadIcon/basic.png" alt="image correspondant à la route en cours" height="56" width="56"/>
           </li>
           <li>
-            <p>1</p>
+            <p>{{ zone }}</p>
           </li>
         </ul>
       </v-carousel-item>
+
+      <v-btn
+        v-if="zoneEnCours > 0"
+        @click="changeZone(zoneEnCours-1)"
+        class="prev-button"
+        icon
+      >
+        <v-icon>mdi-chevron-left</v-icon>
+      </v-btn>
+
+      <v-btn
+        v-if="zoneEnCours < props.infoJoueur[0].zoneMax - 1"
+        @click="changeZone(zoneEnCours+1)"
+        class="next-button"
+        icon
+      >
+        <v-icon>mdi-chevron-right</v-icon>
+      </v-btn>
     </v-carousel>
+
     <p class="font-italic zone-txt-restant">0 / 10</p>
   </div>
 </template>
 
-
 <script setup>
+import { ref } from 'vue';
 
+
+const props = defineProps({
+  pokemonStore: {
+    type: Object,
+    required: true,
+  },
+  infoJoueur: {
+    type: Array,
+    required: true,
+  }
+});
+
+
+const zoneEnCours = ref(props.infoJoueur[0].zoneEnCours - 1)
+
+function changeZone(nouvelleZone) {
+  zoneEnCours.value = nouvelleZone;
+}
 </script>
 
-
-
 <style scoped lang="sass">
-
 .zone-txt-restant
   margin-top: 6px
 
@@ -40,11 +74,29 @@
   font-size: 18px
   font-weight: bold
 
-
 ul
   text-decoration: none
   list-style-type: none
   padding: 0
   margin: 0
 
+/* Style des boutons précédents et suivants */
+.prev-button, .next-button
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
+  background: rgba(0, 0, 0, 0.8)
+  color: white
+  border-radius: 50% /* Rendre les boutons ronds */
+  width: 50px
+  height: 50px
+  display: flex
+  align-items: center
+  justify-content: center
+
+.prev-button
+  left: 10px
+
+.next-button
+  right: 10px
 </style>

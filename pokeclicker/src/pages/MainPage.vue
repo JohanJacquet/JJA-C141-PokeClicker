@@ -34,7 +34,8 @@
     <!-- Partie droite -->
     <div class="right-container">
       <carousel-zone class="carousel"
-                   :infoJoueur="joueur"></carousel-zone>
+                   :infoJoueur="joueur"
+                   :pokemonStore="pokemonStore"></carousel-zone>
       <btn-pokemon class="btn" @changerPokemon="changePokemon"
                    :infoJoueur="joueur"
                    :pokemonStore="pokemonStore"
@@ -61,8 +62,8 @@ const joueur = reactive([{
   attaque: 20,
   critChance: 1,
   critMult: 2,
-  zoneEnCours: 1,
-  zoneMax: 1,
+  zoneEnCours: 4,
+  zoneMax: 10,
   pokemonEnCours: null
 }])
 
