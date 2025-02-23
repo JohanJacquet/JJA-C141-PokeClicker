@@ -125,7 +125,7 @@ function attaquePokemon() {
 
       setTimeout(() => {
         gagnerArgent();
-        emit("changerPokemon");
+        emit("changerPokemon", true);
         viePokemonAff.value = 100;
         couleurPokemon.value = COULEUR_HAUT_HP;
         isDying.value = false; // Désactive la classe après 300ms
@@ -154,7 +154,7 @@ function attaqueDPSPokemon() {
 
       setTimeout(() => {
         gagnerArgent();
-        emit("changerPokemon");
+        emit("changerPokemon", true);
         viePokemonAff.value = 100;
         isDying.value = false; // Désactive la classe après 300ms
       }, 300); // Durée de l'effet rouge (300ms)

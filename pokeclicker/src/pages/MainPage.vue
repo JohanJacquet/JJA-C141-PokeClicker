@@ -35,7 +35,9 @@
     <div class="right-container">
       <carousel-zone class="carousel"
                    :infoJoueur="joueur"
-                   :pokemonStore="pokemonStore"></carousel-zone>
+                   :pokemonStore="pokemonStore"
+                   :changePokemon="changePokemon"
+                   :compteurZone="compteurZoneSuivante"></carousel-zone>
       <btn-pokemon class="btn" @changerPokemon="changePokemon"
                    :infoJoueur="joueur"
                    :pokemonStore="pokemonStore"
@@ -63,7 +65,7 @@ const joueur = reactive([{
   critChance: 1,
   critMult: 2,
   zoneEnCours: 4,
-  zoneMax: 10,
+  zoneMax: 5,
   pokemonEnCours: null
 }])
 
@@ -122,7 +124,7 @@ const magasin = reactive([
     imgUpgrade: "../assets/shopIcon/pichu-upgrade.png",
     alt: "image du pokemon pichu, correspondant à l'amélioration N°2",
     tooltip: "Acheter des Pichu ajoute ",
-    nbreAchat: 0,
+    nbreAchat: 110,
     nbreAchatUpgrade: 0,
     upgrades: [
       {
@@ -164,11 +166,14 @@ const tab = ref(null);
 
 const emit = defineEmits(["update:videoBg"]); // Permet de mettre à jour la prop dans App.vue
 const clickCount = ref(0);
+const compteurZoneSuivante = ref(0)
 
 const joueurDPC = computed(() => {
   let totalDPC = 0
   for (let ligneMagasin of magasin) {
-    totalDPC += getDegatTotalObjet(ligneMagasin, "DPC")
+    if (ligneMagasin.typeDegat === "DPC") {
+      totalDPC += getDegatTotalObjet(ligneMagasin)
+    }
   }
 
   return totalDPC + joueur[0].attaque
@@ -177,7 +182,9 @@ const joueurDPC = computed(() => {
 const joueurDPS = computed(() => {
   let totalDPS = 0
   for (let ligneMagasin of magasin) {
-    totalDPS += getDegatTotalObjet(ligneMagasin, "DPS")
+    if (ligneMagasin.typeDegat === "DPS") {
+      totalDPS += getDegatTotalObjet(ligneMagasin)
+    }
   }
 
   return totalDPS
@@ -194,18 +201,7 @@ function incrementClickCount() {
 }
 
 // Calcule les dégats qu'un objet passé en paramètre fait et retourne ce nombre
-// Permet de filtrer soit "DPS" ou "DPC" pour permet de calculer uniquement les objets
-// d'un certain type
-function getDegatTotalObjet(ligneMagasin, filtre) {
-
-  // retourne 0 si l'objet ne correspond pas au filtre voulu (degat par clic ou degat par seconde
-  let typeDegat = ligneMagasin.typeDegat
-  if (filtre !== undefined) {
-    if ((typeDegat === "DPC" && filtre === "DPS") || (typeDegat === "DPS" && filtre === "DPC")) {
-      return 0
-    }
-  }
-
+function getDegatTotalObjet(ligneMagasin) {
   let mult = 1
   let degatDefaut = ligneMagasin.typeDegat === "DPC" ? ligneMagasin.dpc : ligneMagasin.dps
 
@@ -219,7 +215,9 @@ function getDegatTotalObjet(ligneMagasin, filtre) {
   return Math.round((degatDefaut * ligneMagasin.nbreAchat) * mult)
 }
 
-function changePokemon() {
+// Change le pokemon par un autre en prenant en compte la zone dans laquelle on est.
+// Si le paramètre isDead est vrai, cela veut dire qu'on a tué le pokemon (pas juste changé de zone)
+function changePokemon(isDead = false) {
   if (pokemonStore.pokemons.length > 0) {
     // Récupère un pokemon aléatoire du tableau de pokemon
     const randomPoke = JSON.parse(JSON.stringify(pokemonStore.pokemons[Math.floor(Math.random() * pokemonStore.pokemons.length)]));
@@ -230,6 +228,12 @@ function changePokemon() {
 
     // Affecte le nouveau pokemon au pokemon actuelle
     joueur[0].pokemonEnCours = randomPoke;
+
+    if (isDead) {
+      compteurZoneSuivante.value += 1
+    } else {
+      compteurZoneSuivante.value = 0
+    }
   }
 }
 
