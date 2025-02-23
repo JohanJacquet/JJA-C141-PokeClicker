@@ -68,6 +68,12 @@ const nouvelleZoneFini = computed(() => {
       return true
     } else {
       props.infoJoueur[0].zoneMax += 1
+      props.compteurZone = 0
+
+
+      setTimeout(() => {
+        changeZone(zoneEnCours.value+1)
+      }, 200); // Réduit la durée pour rendre l'animation plus réactive
       return false
     }
   } else {
