@@ -4,7 +4,7 @@
       <v-carousel-item v-for="(zone, index) in props.infoJoueur[0].zoneMax" :key="index">
         <ul>
           <li>
-            <img src="../assets/roadIcon/basic.png" alt="image correspondant à la route en cours" height="56" width="56"/>
+            <img src="../assets/roadIcon/cave.png" alt="image correspondant à la route en cours" height="56" width="56"/>
           </li>
           <li>
             <p>{{ zone }}</p>
@@ -55,10 +55,14 @@ const props = defineProps({
   compteurZone: {
     type: Number,
     required: true,
+  },
+  resetCompteurZone: {
+    type: Function,
+    required: true,
   }
 });
 
-const MAX_POKEMON = 10
+const MAX_POKEMON = 3
 const zoneEnCours = ref(props.infoJoueur[0].zoneEnCours - 1)
 
 const nouvelleZoneFini = computed(() => {
@@ -68,7 +72,7 @@ const nouvelleZoneFini = computed(() => {
       return true
     } else {
       props.infoJoueur[0].zoneMax += 1
-      props.compteurZone = 0
+      props.resetCompteurZone()
 
 
       setTimeout(() => {

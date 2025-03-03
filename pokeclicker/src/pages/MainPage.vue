@@ -37,7 +37,8 @@
                    :infoJoueur="joueur"
                    :pokemonStore="pokemonStore"
                    :changePokemon="changePokemon"
-                   :compteurZone="compteurZoneSuivante"></carousel-zone>
+                   :compteurZone="compteurZoneSuivante"
+                   :resetCompteurZone="resetCompteurZone"></carousel-zone>
       <btn-pokemon class="btn" @changerPokemon="changePokemon"
                    :infoJoueur="joueur"
                    :pokemonStore="pokemonStore"
@@ -189,6 +190,10 @@ const joueurDPS = computed(() => {
 
   return totalDPS
 })
+
+function resetCompteurZone() {
+  compteurZoneSuivante.value = 0
+}
 
 // Permet de compter le nombre de clic sur l'onglet pour faire un truc à la con qui sert à rien
 function incrementClickCount() {
