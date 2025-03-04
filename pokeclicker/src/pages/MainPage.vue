@@ -226,6 +226,7 @@ function changePokemon(isDead = false) {
   if (pokemonStore.pokemons.length > 0) {
     // Récupère un pokemon aléatoire du tableau de pokemon
     const randomPoke = JSON.parse(JSON.stringify(pokemonStore.pokemons[Math.floor(Math.random() * pokemonStore.pokemons.length)]));
+    let estBoss = joueur[0].zoneEnCours % 10 === 0
 
     // Recalcule les hp du pokemon en tenant compte de la zone
     randomPoke.hp = randomPoke.stats[0].base_stat * joueur[0].zoneEnCours
