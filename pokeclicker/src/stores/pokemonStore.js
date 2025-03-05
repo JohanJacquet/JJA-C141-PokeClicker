@@ -21,6 +21,7 @@ export const usePokemonStore = defineStore('pokemon', {
         const allPokemons = details.map(res => ({
           id: res.data.id,
           name: res.data.name,
+          estBoss: false,
           image: res.data.sprites.front_default,
           types: res.data.types.map(type => type.type.name), // Liste des types
           hp: res.data.stats[0].base_stat,

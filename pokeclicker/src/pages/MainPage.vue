@@ -62,11 +62,11 @@ const props = defineProps({
 
 const joueur = reactive([{
   argent: 9999,
-  attaque: 20,
+  attaque: 500,
   critChance: 1,
   critMult: 2,
-  zoneEnCours: 4,
-  zoneMax: 5,
+  zoneEnCours: 8,
+  zoneMax: 11,
   pokemonEnCours: null
 }])
 
@@ -125,7 +125,7 @@ const magasin = reactive([
     imgUpgrade: "../assets/shopIcon/pichu-upgrade.png",
     alt: "image du pokemon pichu, correspondant à l'amélioration N°2",
     tooltip: "Acheter des Pichu ajoute ",
-    nbreAchat: 110,
+    nbreAchat: 0,
     nbreAchatUpgrade: 0,
     upgrades: [
       {
@@ -225,12 +225,19 @@ function getDegatTotalObjet(ligneMagasin) {
 function changePokemon(isDead = false) {
   if (pokemonStore.pokemons.length > 0) {
     // Récupère un pokemon aléatoire du tableau de pokemon
+    // On fait une copie de ce pokemon (on ne veut pas changer directement notre jeu de données
     const randomPoke = JSON.parse(JSON.stringify(pokemonStore.pokemons[Math.floor(Math.random() * pokemonStore.pokemons.length)]));
-    let estBoss = joueur[0].zoneEnCours % 10 === 0
+    randomPoke.estBoss = (joueur[0].zoneEnCours+1) % 10 === 0
 
-    // Recalcule les hp du pokemon en tenant compte de la zone
-    randomPoke.hp = randomPoke.stats[0].base_stat * joueur[0].zoneEnCours
-    randomPoke.stats[0].base_stat = randomPoke.stats[0].base_stat * joueur[0].zoneEnCours
+    if (randomPoke.estBoss) {
+      // Recalcule les hp du pokemon en tenant compte de la zone
+      randomPoke.hp = 10 * (joueur[0].zoneEnCours + Math.pow(1.55,joueur[0].zoneEnCours)) * (randomPoke.estBoss * 10)
+      randomPoke.stats[0].base_stat = 10 * (joueur[0].zoneEnCours + Math.pow(1.55,joueur[0].zoneEnCours)) * (randomPoke.estBoss * 10)
+    } else {
+      // Recalcule les hp du pokemon en tenant compte de la zone
+      randomPoke.hp = 10 * (joueur[0].zoneEnCours + Math.pow(1.55,joueur[0].zoneEnCours))
+      randomPoke.stats[0].base_stat = 10 * (joueur[0].zoneEnCours + Math.pow(1.55,joueur[0].zoneEnCours))
+    }
 
     // Affecte le nouveau pokemon au pokemon actuelle
     joueur[0].pokemonEnCours = randomPoke;

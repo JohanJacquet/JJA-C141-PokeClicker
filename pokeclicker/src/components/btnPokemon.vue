@@ -82,9 +82,10 @@ const randomPokemon = computed(() => {
 });
 
 function gagnerArgent() {
-  let argentTotal = (Math.floor(Math.random() * (ARGENT_MAX - ARGENT_MIN)) + 1) * props.infoJoueur[0].zoneEnCours
-    + Math.ceil((randomPokemon.value.stats[0].base_stat * props.infoJoueur[0].zoneEnCours * 0.005));
+  //let argentTotal = (Math.floor(Math.random() * (ARGENT_MAX - ARGENT_MIN)) + 1) * props.infoJoueur[0].zoneEnCours
+  //  + Math.ceil((randomPokemon.value.stats[0].base_stat * props.infoJoueur[0].zoneEnCours * 0.005));
 
+  let argentTotal = 1 * Math.pow(1.6,props.infoJoueur[0].zoneEnCours+1);
   // Ajoute plusieurs sacs d'argent avec des positions aléatoires
   for (let i = 0; i < 3; i++) { // 3 sacs par Pokémon tué
     moneyBags.value.push({
