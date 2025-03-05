@@ -76,7 +76,7 @@ const magasin = reactive([
   {
     nom: "Protéine",
     img: "../assets/shopIcon/proteine.png",
-    alt: "image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°1",
+    alt: "image de l'objet de protéine, correspondant à l'objet N°1",
     tooltip: "Acheter des protéines ajoute ",
     nbreAchat: 0,
     nbreAchatUpgrade: 0,
@@ -252,14 +252,15 @@ function getDegatTotalObjet(ligneMagasin) {
   let mult = 1
   let degatDefaut = ligneMagasin.typeDegat === "DPC" ? ligneMagasin.dpc : ligneMagasin.dps
 
+  let degatTotaux = Math.round(degatDefaut * ligneMagasin.nbreAchat)
     for (let upgrade of ligneMagasin.upgrades) {
       if (upgrade.acheterUpgrade === true) {
-        mult += upgrade.multUpgrade
+        degatTotaux *= (upgrade.multUpgrade + mult)
       }
 
   }
 
-  return Math.round((degatDefaut * ligneMagasin.nbreAchat) * mult)
+  return degatTotaux
 }
 
 // Change le pokemon par un autre en prenant en compte la zone dans laquelle on est.
