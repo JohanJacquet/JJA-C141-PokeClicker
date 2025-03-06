@@ -92,6 +92,10 @@ function changeZone(nouvelleZone) {
   props.infoJoueur[0].zoneEnCours = nouvelleZone;
   props.changePokemon(false);
 }
+
+function changeRecontrePokemon() {
+
+}
 </script>
 
 <style scoped lang="sass">
