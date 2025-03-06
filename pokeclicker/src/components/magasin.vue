@@ -101,21 +101,28 @@ function getPrixObjet(ligneMagasin) {
 // Récupère les dégats que donne un seul objet
 function getDegatObjet(ligneMagasin) {
 
-  let degat = "0"
+  let degat = 0
   let mult = 1
+  let typeDegat = "aucun"
 
+  // Vérifie si l'objet en cours et un objet DPS ou DPC
+  if (ligneMagasin.typeDegat === "DPC") {
+    degat = ligneMagasin.dpc
+    typeDegat = "DPC"
+  } else {
+    degat = ligneMagasin.dps
+    typeDegat = "DPS"
+  }
+
+  // Va vérifier tous les multiplicateur pour ensuite calculer les dégat totaux
   for (let upgrade of ligneMagasin.upgrades) {
-    if (upgrade.acheterUpgrade === true) {
-      mult += upgrade.multUpgrade
+    if (upgrade.acheterUpgrade === true && upgrade.multUpgrade !== 0) {
+      degat *= (upgrade.multUpgrade+mult)
     }
   }
-  if (ligneMagasin.typeDegat === "DPC") {
-    degat = (ligneMagasin.dpc * mult) + " " + ligneMagasin.typeDegat
-  } else {
-    degat = (ligneMagasin.dps * mult) + " " + ligneMagasin.typeDegat
-  }
 
-  return degat
+  // Retourne les dégat totaux
+  return degat + " " + ligneMagasin.typeDegat
 }
 
 // Permet d'acheter un objet dans le magasin en retirant l'argent du joueur

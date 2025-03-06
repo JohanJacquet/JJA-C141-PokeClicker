@@ -61,7 +61,7 @@ const props = defineProps({
 })
 
 const joueur = reactive([{
-  argent: 9999,
+  argent: 99999999999,
   attaque: 1,
   critChance: 1,
   critMult: 2,
@@ -69,6 +69,8 @@ const joueur = reactive([{
   zoneMax: 11,
   multDps: 1,
   multDpc: 1,
+  pourcDpsEnDpc: 0,
+  pourcDpcEnDps: 0,
   pokemonEnCours: null
 }])
 
@@ -78,13 +80,15 @@ const magasin = reactive([
     img: "../assets/shopIcon/proteine.png",
     alt: "image de l'objet de protéine, correspondant à l'objet N°1",
     tooltip: "Acheter des protéines ajoute ",
-    nbreAchat: 0,
+    nbreAchat: 150,
     nbreAchatUpgrade: 0,
     upgrades: [
       {
         nbreAchatRequis: 10,
         prixUpgrade: 100,
         multUpgrade: 1,
+        pourcDpsEnDpc: 0,
+        pourcDpcEnDps: 0,
         acheterUpgrade: false,
         imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
         altUpgrade: "image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°1",
@@ -95,6 +99,8 @@ const magasin = reactive([
         nbreAchatRequis: 25,
         prixUpgrade: 250,
         multUpgrade: 1,
+        pourcDpsEnDpc: 0,
+        pourcDpcEnDps: 0,
         acheterUpgrade: false,
         imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
         altUpgrade: "image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°2",
@@ -105,6 +111,8 @@ const magasin = reactive([
         nbreAchatRequis: 50,
         prixUpgrade: 1000,
         multUpgrade: 1,
+        pourcDpsEnDpc: 0,
+        pourcDpcEnDps: 0,
         acheterUpgrade: false,
         imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
         altUpgrade: "image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°3",
@@ -115,6 +123,8 @@ const magasin = reactive([
         nbreAchatRequis: 75,
         prixUpgrade: 8000,
         multUpgrade: 1,
+        pourcDpsEnDpc: 0,
+        pourcDpcEnDps: 0,
         acheterUpgrade: false,
         imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
         altUpgrade: "image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°4",
@@ -125,6 +135,8 @@ const magasin = reactive([
         nbreAchatRequis: 100,
         prixUpgrade: 80000,
         multUpgrade: 1.5,
+        pourcDpsEnDpc: 0,
+        pourcDpcEnDps: 0,
         acheterUpgrade: false,
         imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
         altUpgrade: "image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°5",
@@ -135,6 +147,8 @@ const magasin = reactive([
         nbreAchatRequis: 125,
         prixUpgrade: 400000,
         multUpgrade: 2,
+        pourcDpsEnDpc: 0,
+        pourcDpcEnDps: 0,
         acheterUpgrade: false,
         imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
         altUpgrade: "image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°6",
@@ -145,6 +159,8 @@ const magasin = reactive([
         nbreAchatRequis: 150,
         prixUpgrade: 4000000,
         multUpgrade: 2.5,
+        pourcDpsEnDpc: 0,
+        pourcDpcEnDps: 0,
         acheterUpgrade: false,
         imgUpgrade: "../assets/shopIcon/proteine-upgrade.png",
         altUpgrade: "image de l'amélioration de l'objet de protéine, correspondant à l'amélioration N°7",
@@ -167,27 +183,67 @@ const magasin = reactive([
     imgUpgrade: "../assets/shopIcon/pichu-upgrade.png",
     alt: "image du pokemon pichu, correspondant à l'amélioration N°2",
     tooltip: "Acheter des Pichu ajoute ",
-    nbreAchat: 0,
+    nbreAchat: 100,
     nbreAchatUpgrade: 0,
     upgrades: [
       {
-        nbreAchatRequis: 25,
-        prixUpgrade: 1000,
+        nbreAchatRequis: 10,
+        prixUpgrade: 500,
         multUpgrade: 1,
+        pourcDpsEnDpc: 0,
+        pourcDpcEnDps: 0,
         acheterUpgrade: false,
         imgUpgrade: "../assets/shopIcon/pichu-upgrade.png",
         altUpgrade: "image de l'amélioration du pokemon Pichu, correspondant à l'amélioration N°2",
-        tooltipUpgrade: "Acheter l\'amélioration de Pichu augmente l\'efficacité de base par 100%.",
+        tooltipUpgrade: "Acheter l'amélioration de Pichu augmente l'efficacité de base par 100%.",
+        erreur: false,
+      },
+      {
+        nbreAchatRequis: 25,
+        prixUpgrade: 1250,
+        multUpgrade: 1,
+        pourcDpsEnDpc: 0,
+        pourcDpcEnDps: 0,
+        acheterUpgrade: false,
+        imgUpgrade: "../assets/shopIcon/pichu-upgrade.png",
+        altUpgrade: "image de l'amélioration du pokemon Pichu, correspondant à l'amélioration N°2",
+        tooltipUpgrade: "Acheter l'amélioration de Pichu augmente l'efficacité de base par 100%.",
         erreur: false,
       },
       {
         nbreAchatRequis: 50,
         prixUpgrade: 5000,
-        multUpgrade: 2,
+        multUpgrade: 1,
+        pourcDpsEnDpc: 0,
+        pourcDpcEnDps: 0,
         acheterUpgrade: false,
         imgUpgrade: "../assets/shopIcon/pichu-upgrade.png",
         altUpgrade: "image de l'amélioration du pokemon Pichu, correspondant à l'amélioration N°2",
-        tooltipUpgrade: "Acheter l\'amélioration de Pichu augmente l\'efficacité de base par 200%.",
+        tooltipUpgrade: "Acheter l'amélioration de Pichu augmente l'efficacité de base par 100%.",
+        erreur: false,
+      },
+      {
+        nbreAchatRequis: 75,
+        prixUpgrade: 40000,
+        multUpgrade: 1.5,
+        pourcDpsEnDpc: 0,
+        pourcDpcEnDps: 0,
+        acheterUpgrade: false,
+        imgUpgrade: "../assets/shopIcon/pichu-upgrade.png",
+        altUpgrade: "image de l'amélioration du pokemon Pichu, correspondant à l'amélioration N°2",
+        tooltipUpgrade: "Acheter l'amélioration de Pichu augmente l'efficacité de base par 150%.",
+        erreur: false,
+      },
+      {
+        nbreAchatRequis: 100,
+        prixUpgrade: 400000,
+        multUpgrade: 0,
+        pourcDpsEnDpc: 0.5,
+        pourcDpcEnDps: 0,
+        acheterUpgrade: false,
+        imgUpgrade: "../assets/shopIcon/pichu-upgrade.png",
+        altUpgrade: "image de l'amélioration du pokemon Pichu, correspondant à l'amélioration N°2",
+        tooltipUpgrade: "Augmente le DPC par 0.5% de votre DPS.",
         erreur: false,
       }
     ],
@@ -213,13 +269,24 @@ const compteurZoneSuivante = ref(0)
 
 const joueurDPC = computed(() => {
   let totalDPC = 0
+  let multDpsEnDpc = 0
   for (let ligneMagasin of magasin) {
+    // Récupère le total de DPC donnée par les améliorations de type DPC
     if (ligneMagasin.typeDegat === "DPC") {
       totalDPC += getDegatTotalObjet(ligneMagasin)
     }
+
+    // Récupère les multiplicateur de DPC par rapport au DPS
+    for (let upgrade of ligneMagasin.upgrades) {
+      if (upgrade.acheterUpgrade) {
+        if (upgrade.pourcDpsEnDpc !== 0) {
+          multDpsEnDpc += upgrade.pourcDpsEnDpc
+        }
+      }
+    }
   }
 
-  return totalDPC + joueur[0].attaque
+  return totalDPC + joueur[0].attaque + ((joueurDPS.value/100) * multDpsEnDpc)
 })
 
 const joueurDPS = computed(() => {
@@ -257,8 +324,7 @@ function getDegatTotalObjet(ligneMagasin) {
       if (upgrade.acheterUpgrade === true) {
         degatTotaux *= (upgrade.multUpgrade + mult)
       }
-
-  }
+    }
 
   return degatTotaux
 }
