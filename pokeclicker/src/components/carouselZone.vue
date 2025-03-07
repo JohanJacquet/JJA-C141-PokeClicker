@@ -31,7 +31,7 @@
       </v-btn>
     </v-carousel>
 
-    <p class="font-italic zone-txt-restant" v-if="nouvelleZoneFini">{{ compteurZone }} / 10</p>
+    <p class="font-italic zone-txt-restant" v-if="nouvelleZoneFini">{{ compteurZone }} / {{ MAX_POKEMON }}</p>
   </div>
 </template>
 
@@ -63,7 +63,7 @@ const props = defineProps({
 });
 
 const MAX_POKEMON = 3
-const zoneEnCours = ref(props.infoJoueur[0].zoneEnCours - 1)
+const zoneEnCours = ref(props.infoJoueur[0].zoneEnCours)
 
 const nouvelleZoneFini = computed(() => {
 
@@ -96,6 +96,15 @@ function changeZone(nouvelleZone) {
 function changeRecontrePokemon() {
 
 }
+
+function getZoneImg(zoneEnCours) {
+  if (zoneEnCours) {
+
+  }
+}
+
+
+
 </script>
 
 <style scoped lang="sass">
