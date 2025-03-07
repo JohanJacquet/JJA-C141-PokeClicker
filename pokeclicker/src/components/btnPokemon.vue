@@ -4,7 +4,7 @@
       <ul>
         <li>
           <img :src="randomPokemon?.image" :alt="randomPokemon?.name"
-               :class="{ 'dying': isDying }" />
+               :class="{ 'dying': randomPokemon?.estMort }" />
         </li>
         <li>
           <p>{{ randomPokemon?.name }}</p>
@@ -29,17 +29,14 @@
         class="money-bag"
         :style="{ left: bag.x + 'px', top: bag.y + 'px' }"
         @mouseenter="collectMoney(index, bag.amount)"
-      />
+        alt="Image d'un sac d'argent"/>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { usePokemonStore } from "@/stores/pokemonStore";
 
-const ARGENT_MIN = 2
-const ARGENT_MAX = 5
 const COULEUR_HAUT_HP = 'success'
 const COULEUR_MOYEN_HP = 'yellow'
 const COULEUR_BAS_HP = 'red'
@@ -66,15 +63,17 @@ const props = defineProps({
 
 const emit = defineEmits(["changerPokemon"])
 
+
 const viePokemonAff = ref(100)
 const couleurPokemon = ref(COULEUR_HAUT_HP)
-const isDying = ref(false);
 const moneyBags = ref([]); // Stocke les sacs d'argent
 const damageText = ref(""); // Texte des dégâts
 const damageTextVisible = ref(false); // Indicateur pour afficher/masquer le texte
 const cursorPosition = ref({ x: 0, y: 0 }); // Position du curseur
 
 let intervalId = null;
+
+
 
 // Utilisation du getter pour obtenir un Pokémon aléatoire
 const randomPokemon = computed(() => {
@@ -105,7 +104,7 @@ function collectMoney(index, amount) {
 }
 
 function attaquePokemon() {
-  if (!isDying.value) {
+  if (!randomPokemon.value.estMort) {
     randomPokemon.value.hp -= props.dpcJoueur; // Utilisation de dpcJoueur pour les dégâts infligés
     let pourcentagePv = Math.ceil(randomPokemon.value.hp / randomPokemon.value.stats[0].base_stat * 100)
 
@@ -122,14 +121,14 @@ function attaquePokemon() {
 
     // Modifie la couleur de la barre de vie selon les PV manquants du Pokémon
     if (pourcentagePv <= 0) {
-      isDying.value = true; // Active la classe rouge
+      randomPokemon.value.estMort = true; // Active la classe rouge
 
       setTimeout(() => {
         gagnerArgent();
         emit("changerPokemon", true);
         viePokemonAff.value = 100;
         couleurPokemon.value = COULEUR_HAUT_HP;
-        isDying.value = false; // Désactive la classe après 300ms
+        randomPokemon.value.estMort = false; // Désactive la classe après 300ms
       }, 300); // Durée de l'effet rouge (300ms)
 
       viePokemonAff.value = 100
@@ -143,7 +142,7 @@ function attaquePokemon() {
 }
 
 function attaqueDPSPokemon() {
-  if (!isDying.value) {
+  if (!randomPokemon.value.estMort) {
     randomPokemon.value.hp -= props.dpsJoueur; // Utilisation de dpcJoueur pour les dégâts infligés
     let pourcentagePv = Math.ceil(randomPokemon.value.hp / randomPokemon.value.stats[0].base_stat * 100)
 
@@ -151,13 +150,13 @@ function attaqueDPSPokemon() {
 
     // Modifie la couleur de la barre de vie selon les PV manquants du Pokémon
     if (pourcentagePv <= 0) {
-      isDying.value = true; // Active la classe rouge
+      randomPokemon.value.estMort = true; // Active la classe rouge
 
       setTimeout(() => {
         gagnerArgent();
         emit("changerPokemon", true);
         viePokemonAff.value = 100;
-        isDying.value = false; // Désactive la classe après 300ms
+        randomPokemon.value.estMort = false; // Désactive la classe après 300ms
       }, 300); // Durée de l'effet rouge (300ms)
 
       viePokemonAff.value = 100

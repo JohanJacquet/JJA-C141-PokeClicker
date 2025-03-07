@@ -66,7 +66,7 @@ const joueur = reactive([{
   critChance: 1,
   critMult: 2,
   zoneEnCours: 9,
-  zoneMax: 11,
+  zoneMax: 10,
   multDps: 1,
   multDpc: 1,
   pourcDpsEnDpc: 0,
@@ -80,7 +80,7 @@ const magasin = reactive([
     img: "../assets/shopIcon/proteine.png",
     alt: "image de l'objet de protéine, correspondant à l'objet N°1",
     tooltip: "Acheter des protéines ajoute ",
-    nbreAchat: 150,
+    nbreAchat: 15000000,
     nbreAchatUpgrade: 0,
     upgrades: [
       {
@@ -183,7 +183,7 @@ const magasin = reactive([
     imgUpgrade: "../assets/shopIcon/pichu-upgrade.png",
     alt: "image du pokemon pichu, correspondant à l'amélioration N°2",
     tooltip: "Acheter des Pichu ajoute ",
-    nbreAchat: 100,
+    nbreAchat: 150,
     nbreAchatUpgrade: 0,
     upgrades: [
       {
@@ -337,7 +337,6 @@ function changePokemon(isDead = false) {
     // On fait une copie de ce pokemon (on ne veut pas changer directement notre jeu de données
     const randomPoke = JSON.parse(JSON.stringify(pokemonStore.pokemons[Math.floor(Math.random() * pokemonStore.pokemons.length)]));
     randomPoke.estBoss = (joueur[0].zoneEnCours+1) % 10 === 0
-
     if (randomPoke.estBoss) {
       // Recalcule les hp du pokemon en tenant compte de la zone
       randomPoke.hp = 10 * (joueur[0].zoneEnCours + Math.pow(1.55,joueur[0].zoneEnCours)) * (randomPoke.estBoss * 10)

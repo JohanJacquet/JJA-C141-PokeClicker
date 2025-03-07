@@ -87,7 +87,14 @@ const nouvelleZoneFini = computed(() => {
 
 
 
-function changeZone(nouvelleZone) {
+async function changeZone(nouvelleZone) {
+  // Attente tant que le Pokémon est mort
+  while (props.infoJoueur[0].pokemonEnCours.estMort) {
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+
+  // Une fois que le Pokémon n'est plus mort, on change de zone
+  // pour éviter le gros fils de pute de bug qui m'a pris longtemp à résoudre
   zoneEnCours.value = nouvelleZone;
   props.infoJoueur[0].zoneEnCours = nouvelleZone;
   props.changePokemon(false);
