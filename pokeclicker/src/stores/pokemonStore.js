@@ -77,6 +77,13 @@ export const usePokemonStore = defineStore('pokemon', {
       });
 
       this.pokemons = result;
+    },
+
+    setPokemonsAvailable(zone) {
+      // 1 - 9 : type normal | faible medium
+      // 10 : type roche | strong
+      // 11 à 19 : type roche, sol, acier | faible
+      // 20 : eau,
     }
   },
 });

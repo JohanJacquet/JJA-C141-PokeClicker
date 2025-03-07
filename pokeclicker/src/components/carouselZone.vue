@@ -4,7 +4,7 @@
       <v-carousel-item v-for="(zone, index) in props.infoJoueur[0].zoneMax" :key="index">
         <ul>
           <li>
-            <img src="../assets/roadIcon/cave.png" alt="image correspondant à la route en cours" height="56" width="56"/>
+            <img src="../assets/roadIcon/road2.png" alt="image correspondant à la route en cours" height="56" width="56"/>
           </li>
           <li>
             <p>{{ zone }}</p>
@@ -104,10 +104,17 @@ function changeRecontrePokemon() {
 
 }
 
-function getZoneImg(zoneEnCours) {
-  if (zoneEnCours) {
+function getZoneImg(Indexzone) {
+  let numeroZone = Indexzone + 1
 
+  // Détermine si c'est un boss (toutes les 10 zones)
+  if (numeroZone % 10 === 0) {
+    return `../assets/roadIcon/boss${numeroZone / 10}.png`;
   }
+
+  // Détermine la série d'images (chaque série dure 9 zones)
+  let numSerie = Math.floor(numeroZone / 10) + 1;
+  return `../assets/roadIcon/road${numSerie}.png`;
 }
 
 
