@@ -4,7 +4,7 @@
       <v-carousel-item v-for="(zone, index) in props.infoJoueur[0].zoneMax" :key="index">
         <ul>
           <li>
-            <img src="../assets/roadIcon/road2.png" alt="image correspondant à la route en cours" height="56" width="56"/>
+            <img :src="getZoneImg(zone)" alt="image correspondant à la route en cours" height="56" width="56"/>
           </li>
           <li>
             <p>{{ zone }}</p>
@@ -36,14 +36,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { usePokemonStore } from '@/stores/pokemonStore.js';  // Adapte le chemin à ton projet
 
 const props = defineProps({
-  pokemonStore: {
-    type: Object,
-    required: true,
-  },
   infoJoueur: {
     type: Array,
     required: true,
@@ -62,29 +58,29 @@ const props = defineProps({
   }
 });
 
-const MAX_POKEMON = 3
-const zoneEnCours = ref(props.infoJoueur[0].zoneEnCours)
+const MAX_POKEMON = 3;
+const zoneEnCours = ref(props.infoJoueur[0].zoneEnCours);
+
+// Accéder au store Pokémon via Pinia
+const pokemonStore = usePokemonStore();
 
 const nouvelleZoneFini = computed(() => {
-
-  if (zoneEnCours.value+1 === props.infoJoueur[0].zoneMax) {
+  if (zoneEnCours.value + 1 === props.infoJoueur[0].zoneMax) {
     if (props.compteurZone < MAX_POKEMON) {
-      return true
+      return true;
     } else {
-      props.infoJoueur[0].zoneMax += 1
-      props.resetCompteurZone()
-
+      props.infoJoueur[0].zoneMax += 1;
+      props.resetCompteurZone();
 
       setTimeout(() => {
-        changeZone(zoneEnCours.value+1)
+        changeZone(zoneEnCours.value + 1);
       }, 200); // Réduit la durée pour rendre l'animation plus réactive
-      return false
+      return false;
     }
   } else {
-    return false
+    return false;
   }
-})
-
+});
 
 async function changeZone(nouvelleZone) {
   // Attente tant que le Pokémon est mort
@@ -93,33 +89,31 @@ async function changeZone(nouvelleZone) {
   }
 
   // Une fois que le Pokémon n'est plus mort, on change de zone
-  // pour éviter le gros fils de pute de bug qui m'a pris longtemp à résoudre
+  // pour éviter le bug de changement
   zoneEnCours.value = nouvelleZone;
   props.infoJoueur[0].zoneEnCours = nouvelleZone;
-  console.log(nouvelleZone+1); // Vérifie ici si zone est bien défini
-  //changeRecontrePokemon(nouvelleZone);
+  changeRecontrePokemon(nouvelleZone);
   props.changePokemon(false);
 }
 
 function changeRecontrePokemon(indexZone) {
-  props.pokemonStore.setPokemonsAvailable(zone+1)
+  // Ici, on met à jour les Pokémon disponibles en fonction de la zone
+  pokemonStore.setPokemonsAvailable(indexZone + 1);  // Pas besoin de 'zone' ici, on passe 'indexZone + 1'
 }
 
-function getZoneImg(Indexzone) {
-  let numeroZone = Indexzone + 1
+function getZoneImg(indexzone) {
+  console.log(indexzone)
+  let numeroZone = indexzone + 1;
 
   // Détermine si c'est un boss (toutes les 10 zones)
   if (numeroZone % 10 === 0) {
-    return `../assets/roadIcon/boss${numeroZone / 10}.png`;
+    return `../assets/roadIcon/boss/boss${numeroZone / 10}.png`;
   }
 
   // Détermine la série d'images (chaque série dure 9 zones)
   let numSerie = Math.floor(numeroZone / 10) + 1;
   return `../assets/roadIcon/road${numSerie}.png`;
 }
-
-
-
 </script>
 
 <style scoped lang="sass">

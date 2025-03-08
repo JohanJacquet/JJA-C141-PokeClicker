@@ -66,7 +66,7 @@ const joueur = reactive([{
   critChance: 1,
   critMult: 2,
   zoneEnCours: 9,
-  zoneMax: 10,
+  zoneMax: 100,
   multDps: 1,
   multDpc: 1,
   pourcDpsEnDpc: 0,
