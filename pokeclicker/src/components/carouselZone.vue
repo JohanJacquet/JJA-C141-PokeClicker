@@ -37,7 +37,7 @@
 
 <script setup>
 import { ref } from 'vue';
-
+import { usePokemonStore } from '@/stores/pokemonStore.js';  // Adapte le chemin à ton projet
 
 const props = defineProps({
   pokemonStore: {
@@ -86,7 +86,6 @@ const nouvelleZoneFini = computed(() => {
 })
 
 
-
 async function changeZone(nouvelleZone) {
   // Attente tant que le Pokémon est mort
   while (props.infoJoueur[0].pokemonEnCours.estMort) {
@@ -97,11 +96,13 @@ async function changeZone(nouvelleZone) {
   // pour éviter le gros fils de pute de bug qui m'a pris longtemp à résoudre
   zoneEnCours.value = nouvelleZone;
   props.infoJoueur[0].zoneEnCours = nouvelleZone;
+  console.log(nouvelleZone+1); // Vérifie ici si zone est bien défini
+  //changeRecontrePokemon(nouvelleZone);
   props.changePokemon(false);
 }
 
-function changeRecontrePokemon() {
-
+function changeRecontrePokemon(indexZone) {
+  props.pokemonStore.setPokemonsAvailable(zone+1)
 }
 
 function getZoneImg(Indexzone) {
