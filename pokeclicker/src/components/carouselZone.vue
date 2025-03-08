@@ -1,19 +1,19 @@
 <template>
   <div class="zone-container">
-    <v-carousel v-model="zoneEnCours" hide-delimiters :show-arrows="false" class="carousel" height="auto">
-      <v-carousel-item v-for="(zone, index) in props.infoJoueur[0].zoneMax" :key="index">
+    <v-carousel hide-delimiters :show-arrows="false" class="carousel" height="auto">
+      <v-carousel-item>
         <ul>
           <li>
-            <img :src="getZoneImg(zone)" alt="image correspondant à la route en cours" height="56" width="56"/>
+            <img :src="getZoneImg(zoneEnCours)" alt="image correspondant à la route en cours" height="56" width="56"/>
           </li>
           <li>
-            <p>{{ zone }}</p>
+            <p>{{ zoneEnCours }}</p>
           </li>
         </ul>
       </v-carousel-item>
 
       <v-btn
-        v-if="zoneEnCours > 0"
+        v-if="zoneEnCours > 1"
         @click="changeZone(zoneEnCours-1)"
         class="prev-button"
         icon
@@ -22,7 +22,7 @@
       </v-btn>
 
       <v-btn
-        v-if="zoneEnCours < props.infoJoueur[0].zoneMax - 1"
+        v-if="zoneEnCours < props.infoJoueur[0].zoneMax"
         @click="changeZone(zoneEnCours+1)"
         class="next-button"
         icon
@@ -37,7 +37,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { usePokemonStore } from '@/stores/pokemonStore.js';  // Adapte le chemin à ton projet
+import { usePokemonStore } from '@/stores/pokemonStore.js';
 
 const props = defineProps({
   infoJoueur: {
@@ -65,7 +65,7 @@ const zoneEnCours = ref(props.infoJoueur[0].zoneEnCours);
 const pokemonStore = usePokemonStore();
 
 const nouvelleZoneFini = computed(() => {
-  if (zoneEnCours.value + 1 === props.infoJoueur[0].zoneMax) {
+  if (zoneEnCours.value === props.infoJoueur[0].zoneMax) {
     if (props.compteurZone < MAX_POKEMON) {
       return true;
     } else {
@@ -98,12 +98,12 @@ async function changeZone(nouvelleZone) {
 
 function changeRecontrePokemon(indexZone) {
   // Ici, on met à jour les Pokémon disponibles en fonction de la zone
-  pokemonStore.setPokemonsAvailable(indexZone + 1);  // Pas besoin de 'zone' ici, on passe 'indexZone + 1'
+  pokemonStore.setPokemonsAvailable(indexZone);  // Pas besoin de 'zone' ici, on passe 'indexZone + 1'
 }
 
 function getZoneImg(indexzone) {
   console.log(indexzone)
-  let numeroZone = indexzone + 1;
+  let numeroZone = indexzone;
 
   // Détermine si c'est un boss (toutes les 10 zones)
   if (numeroZone % 10 === 0) {

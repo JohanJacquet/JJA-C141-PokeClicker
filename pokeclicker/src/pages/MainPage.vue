@@ -66,7 +66,7 @@ const joueur = reactive([{
   critChance: 1,
   critMult: 2,
   zoneEnCours: 9,
-  zoneMax: 100,
+  zoneMax: 10,
   multDps: 1,
   multDpc: 1,
   pourcDpsEnDpc: 0,
@@ -336,7 +336,7 @@ function changePokemon(isDead = false) {
     // Récupère un pokemon aléatoire du tableau de pokemon
     // On fait une copie de ce pokemon (on ne veut pas changer directement notre jeu de données
     const randomPoke = JSON.parse(JSON.stringify(pokemonStore.pokemons[Math.floor(Math.random() * pokemonStore.pokemons.length)]));
-    randomPoke.estBoss = (joueur[0].zoneEnCours+1) % 10 === 0
+    randomPoke.estBoss = (joueur[0].zoneEnCours) % 10 === 0
     if (randomPoke.estBoss) {
       // Recalcule les hp du pokemon en tenant compte de la zone
       randomPoke.hp = 10 * (joueur[0].zoneEnCours + Math.pow(1.55,joueur[0].zoneEnCours)) * (randomPoke.estBoss * 10)
