@@ -38,22 +38,20 @@ export const usePokemonStore = defineStore('pokemon', {
   actions: {
     async fetchPokemon() {
       try {
-        // Récupérer la liste des 151 premiers Pokémon
         const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=151');
         const pokemonList = response.data.results;
 
-        // Récupérer les détails de chaque Pokémon
         const promises = pokemonList.map(pokemon => axios.get(pokemon.url));
         const details = await Promise.all(promises);
 
-        //  Formatter les données et trier par type & puissance
+        // Récupère tous les infos utiles des pokemon pour ensuite les trier
         const allPokemons = details.map(res => ({
           id: res.data.id,
           name: res.data.name,
           estBoss: false,
           estMort: false,
           image: res.data.sprites.front_default,
-          types: res.data.types.map(type => type.type.name), // Liste des types
+          types: res.data.types.map(type => type.type.name),
           hp: res.data.stats[0].base_stat,
           stats: res.data.stats.map(stat => ({
             name: stat.stat.name,
@@ -61,7 +59,7 @@ export const usePokemonStore = defineStore('pokemon', {
           }))
         }));
 
-        // Trier les Pokémon  `{ type: { weak: [], medium: [], strong: [] } }`
+        // Trier les Pokémon  `{ type (feu, glace,... et leur force) : { weak: [], medium: [], strong: [] } }`
         this.pokemonByType = {};
 
         allPokemons.forEach(pokemon => {
@@ -108,11 +106,6 @@ export const usePokemonStore = defineStore('pokemon', {
       this.pokemons = result;
     },
     setPokemonsAvailable(zone) {
-      if (!this.pokemonByType || Object.keys(this.pokemonByType).length === 0) {
-        console.warn("pokemonByType is empty, make sure fetchPokemon() is called first.");
-        return;
-      }
-
       const match = this.zoneMapping.find(entry => zone >= entry.range[0] && zone <= entry.range[1]);
 
       if (match) {

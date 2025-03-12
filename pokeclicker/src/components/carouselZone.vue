@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import {ref, computed, onMounted} from 'vue';
 import { usePokemonStore } from '@/stores/pokemonStore.js';
 
 const props = defineProps({
@@ -61,7 +61,6 @@ const props = defineProps({
 const MAX_POKEMON = 3;
 const zoneEnCours = ref(props.infoJoueur[0].zoneEnCours);
 
-// Accéder au store Pokémon via Pinia
 const pokemonStore = usePokemonStore();
 
 const nouvelleZoneFini = computed(() => {
@@ -72,9 +71,7 @@ const nouvelleZoneFini = computed(() => {
       props.infoJoueur[0].zoneMax += 1;
       props.resetCompteurZone();
 
-      setTimeout(() => {
-        changeZone(zoneEnCours.value + 1);
-      }, 200); // Réduit la durée pour rendre l'animation plus réactive
+      changeZone(zoneEnCours.value + 1);
       return false;
     }
   } else {
@@ -83,13 +80,10 @@ const nouvelleZoneFini = computed(() => {
 });
 
 async function changeZone(nouvelleZone) {
-  // Attente tant que le Pokémon est mort
   while (props.infoJoueur[0].pokemonEnCours.estMort) {
     await new Promise(resolve => setTimeout(resolve, 100));
   }
 
-  // Une fois que le Pokémon n'est plus mort, on change de zone
-  // pour éviter le bug de changement
   zoneEnCours.value = nouvelleZone;
   props.infoJoueur[0].zoneEnCours = nouvelleZone;
   changeRecontrePokemon(nouvelleZone);
@@ -97,20 +91,17 @@ async function changeZone(nouvelleZone) {
 }
 
 function changeRecontrePokemon(indexZone) {
-  // Ici, on met à jour les Pokémon disponibles en fonction de la zone
-  pokemonStore.setPokemonsAvailable(indexZone);  // Pas besoin de 'zone' ici, on passe 'indexZone + 1'
+  pokemonStore.setPokemonsAvailable(indexZone);
 }
 
 function getZoneImg(indexzone) {
   console.log(indexzone)
   let numeroZone = indexzone;
 
-  // Détermine si c'est un boss (toutes les 10 zones)
   if (numeroZone % 10 === 0) {
     return `../assets/roadIcon/boss/boss${numeroZone / 10}.png`;
   }
 
-  // Détermine la série d'images (chaque série dure 9 zones)
   let numSerie = Math.floor(numeroZone / 10) + 1;
   return `../assets/roadIcon/road${numSerie}.png`;
 }

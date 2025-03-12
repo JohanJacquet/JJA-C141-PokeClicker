@@ -1,6 +1,7 @@
 <template>
   <div class="magasin-container">
-    <p class="ma-2">PokeDollar : {{ props.infoJoueur[0].argent}} et un DPC de {{ dpcJoueur }} et un DPS de {{ dpsJoueur }}</p>
+    <p class="ma-2">PokeDollar : {{ afficheGrandChiffre(props.infoJoueur[0].argent) }}
+      et un DPC de {{ props.infoJoueur[0].argent(dpcJoueur) }} et un DPS de {{ props.infoJoueur[0].argent(dpsJoueur) }}</p>
     <v-table class="custom-table">
       <thead class="magasin-head">
       <tr>
@@ -31,7 +32,10 @@
                  @click="acheterUpgrade(upgrade, ligneMagasin, y)"
                  class="upgrade-img"/>
             <v-tooltip class="tooltipMax" activator="parent" location="start">
-              {{ upgrade.tooltipUpgrade }} <br><span class="float-left"></span><br>{{ligneMagasin.nbreAchat}}/{{ upgrade.nbreAchatRequis }} achat <span class="float-right">{{ upgrade.prixUpgrade }}₽</span>
+              {{ upgrade.tooltipUpgrade }} <br>
+              <span class="float-left"></span><br>
+              {{ligneMagasin.nbreAchat}}/{{ upgrade.nbreAchatRequis }} achat
+              <span class="float-right">{{ afficheGrandChiffre(upgrade.prixUpgrade) }}₽</span>
             </v-tooltip>
           </div>
         </td>
@@ -54,6 +58,8 @@
 </template>
 
 <script setup>
+import {computed} from "vue";
+
 const props = defineProps({
   infoJoueur: {
     type: Array,
@@ -77,14 +83,15 @@ const props = defineProps({
   }
 })
 
-
+const MONTANT_MAX_AFFICHE = 1000000
 const NBRE_CLIGNOTEMENT = 4
 
 const erreurAchat = ref(false)
 
+
 // Comme mon tableau utilise un chemin relatif, il me faut créer
 // un objet URL pour créer un chemin complet car :src à besoin
-// d'un chemin absolute pour fonctionner
+// d'un chemin absolute pour fonctionner du moins je crois mais au moins ça fonctionne
 function getImagePath(path) {
   return new URL(path, import.meta.url).href;
 }
@@ -94,7 +101,12 @@ function getImagePath(path) {
 // prend en paramètre la ligne en cours dont on veut le prix
 function getPrixObjet(ligneMagasin) {
   ligneMagasin.prixEnCours = Math.ceil(ligneMagasin.prixDefaut * Math.pow(ligneMagasin.multPrix, ligneMagasin.nbreAchat))
-  return ligneMagasin.prixEnCours
+  return afficheGrandChiffre(ligneMagasin.prixEnCours)
+}
+
+//
+function afficheGrandChiffre(montant) {
+  return montant >= MONTANT_MAX_AFFICHE ? montant.toExponential(2) : montant
 }
 
 
