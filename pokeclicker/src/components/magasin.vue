@@ -1,7 +1,7 @@
 <template>
   <div class="magasin-container">
     <p class="ma-2">PokeDollar : {{ afficheGrandChiffre(props.infoJoueur[0].argent) }}
-      et un DPC de {{ props.infoJoueur[0].argent(dpcJoueur) }} et un DPS de {{ props.infoJoueur[0].argent(dpsJoueur) }}</p>
+      et un DPC de {{ afficheGrandChiffre(dpcJoueur) }} et un DPS de {{ afficheGrandChiffre(dpsJoueur) }}</p>
     <v-table class="custom-table">
       <thead class="magasin-head">
       <tr>
