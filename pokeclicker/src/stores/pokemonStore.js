@@ -1,39 +1,42 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
+const zoneMapping = [
+  { range: [1, 9], types: ["normal"], strengths: ["weak", "medium"] },
+  { range: [10, 10], types: ["rock"], strengths: ["strong"] },
+  { range: [11, 19], types: ["rock", "ground", "steel"], strengths: ["weak"] },
+  { range: [20, 20], types: ["water"], strengths: ["strong"] },
+  { range: [21, 29], types: ["water"], strengths: ["weak", "medium"] },
+  { range: [30, 30], types: ["electric"], strengths: ["medium"] },
+  { range: [31, 39], types: ["ghost", "poison"], strengths: ["weak", "medium"] },
+  { range: [40, 40], types: ["grass"], strengths: ["strong"] },
+  { range: [41, 49], types: ["grass", "bug"], strengths: ["weak", "medium"] },
+  { range: [50, 50], types: ["poison"], strengths: ["strong"] },
+  { range: [51, 59], types: ["fighting"], strengths: ["weak", "medium", "strong"] },
+  { range: [60, 60], types: ["psychic"], strengths: ["strong"] },
+  { range: [61, 69], types: ["psychic", "fairy"], strengths: ["weak", "medium", "strong"] },
+  { range: [70, 70], types: ["fire"], strengths: ["strong"] },
+  { range: [71, 79], types: ["fire"], strengths: ["weak", "medium"] },
+  { range: [80, 80], types: ["ground"], strengths: ["strong"] },
+  { range: [81, 89], types: ["dragon"], strengths: ["weak", "medium", "strong"] },
+  { range: [90, 90], types: ["ice"], strengths: ["strong"] },
+  { range: [91, 99], types: ["ice"], strengths: ["weak", "medium", "strong"] },
+  { range: [100, 100], types: ["fighting"], strengths: ["strong"] },
+  { range: [101, 109], types: ["flying"], strengths: ["weak", "medium", "strong"] },
+  { range: [110, 110], types: ["poison", "ghost"], strengths: ["strong"] },
+  { range: [111, 119], types: ["electric"], strengths: ["weak", "medium", "strong"] },
+  { range: [120, 120], types: ["dragon"], strengths: ["strong"] },
+  { range: [121, 129], types: ["grass", "poison", "fire", "flying", "water", "bug", "normal", "electric",
+      "ground", "fairy", "fighting", "psychic", "rock", "steel", "ice", "ghost", "dragon"], strengths: ["weak", "medium", "strong"] },
+  { range: [130, 130], types: ["fire", "water", "grass", "normal"], strengths: ["strong"] },
+]
+
 export const usePokemonStore = defineStore('pokemon', {
+
   state: () => ({
     pokemons: [],
     pokemonByType: {}, // Stocke les Pokémon triés par type et par puissance
-    zoneMapping: [
-      { range: [1, 9], types: ["normal"], strengths: ["weak", "medium"] },
-      { range: [10, 10], types: ["rock"], strengths: ["strong"] },
-      { range: [11, 19], types: ["rock", "ground", "steel"], strengths: ["weak"] },
-      { range: [20, 20], types: ["water"], strengths: ["strong"] },
-      { range: [21, 29], types: ["water"], strengths: ["weak", "medium"] },
-      { range: [30, 30], types: ["electric"], strengths: ["medium"] },
-      { range: [31, 39], types: ["ghost", "poison"], strengths: ["weak", "medium"] },
-      { range: [40, 40], types: ["grass"], strengths: ["strong"] },
-      { range: [41, 49], types: ["grass", "bug"], strengths: ["weak", "medium"] },
-      { range: [50, 50], types: ["poison"], strengths: ["strong"] },
-      { range: [51, 59], types: ["fighting"], strengths: ["weak", "medium", "strong"] },
-      { range: [60, 60], types: ["psychic"], strengths: ["strong"] },
-      { range: [61, 69], types: ["psychic", "fairy"], strengths: ["weak", "medium", "strong"] },
-      { range: [70, 70], types: ["fire"], strengths: ["strong"] },
-      { range: [71, 79], types: ["fire"], strengths: ["weak", "medium"] },
-      { range: [80, 80], types: ["ground"], strengths: ["strong"] },
-      { range: [81, 89], types: ["dragon"], strengths: ["weak", "medium", "strong"] },
-      { range: [90, 90], types: ["ice"], strengths: ["strong"] },
-      { range: [91, 99], types: ["ice"], strengths: ["weak", "medium", "strong"] },
-      { range: [100, 100], types: ["fighting"], strengths: ["strong"] },
-      { range: [101, 109], types: ["flying"], strengths: ["weak", "medium", "strong"] },
-      { range: [110, 110], types: ["poison", "ghost"], strengths: ["strong"] },
-      { range: [111, 119], types: ["electric"], strengths: ["weak", "medium", "strong"] },
-      { range: [120, 120], types: ["dragon"], strengths: ["strong"] },
-      { range: [121, 129], types: ["grass", "poison", "fire", "flying", "water", "bug", "normal", "electric",
-          "ground", "fairy", "fighting", "psychic", "rock", "steel", "ice", "ghost", "dragon"], strengths: ["weak", "medium", "strong"] },
-      { range: [130, 130], types: ["fire", "water", "grass", "normal"], strengths: ["strong"] },
-    ]
+    zoneMapping: zoneMapping || []
   }),
   actions: {
     async fetchPokemon() {
