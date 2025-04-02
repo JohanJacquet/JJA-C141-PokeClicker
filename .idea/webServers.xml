@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="3b904029-e43d-44f2-bc6a-cb7f4c2c55e0" name="johan-leboss.ch" url="http://ba0k3o.ftp.infomaniak.com">
+        <fileTransfer host="ba0k3o.ftp.infomaniak.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

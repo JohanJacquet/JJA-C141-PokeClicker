@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="johan-leboss.ch" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="johan-leboss.ch">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$/pokeclicker/dist" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

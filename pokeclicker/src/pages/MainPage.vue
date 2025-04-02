@@ -59,12 +59,12 @@ const props = defineProps({
 })
 
 const joueur = reactive([{
-  argent: 99999999999999,
+  argent: 0,
   attaque: 1,
   critChance: 1,
   critMult: 2,
-  zoneEnCours: 10,
-  zoneMax: 130,
+  zoneEnCours: 1,
+  zoneMax: 1,
   multDps: 1,
   multDpc: 1,
   pourcDpsEnDpc: 0,
@@ -308,7 +308,7 @@ const magasin = reactive([
     imgUpgrade: "../assets/shopIcon/zigzaton-upgrade.png",
     alt: "image du Pokémon Zigzaton",
     tooltip: "Acheter Zigzaton ajoute ",
-    nbreAchat: 250,
+    nbreAchat: 0,
     nbreAchatUpgrade: 0,
     upgrades: [
       {
